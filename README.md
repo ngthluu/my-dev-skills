@@ -1,127 +1,57 @@
-# My Skills
+# My Dev Skills
 
-Reusable AI coding skills for Claude Code, Codex, Cursor, and OpenCode. Clarify an idea into a self-contained spec, then implement it with test-driven development and independent review.
+Two skills for turning an idea into working software: **brainstorm** the spec, then **implement** it with tests and code review.
 
-## Skills
-
-| Skill | What it does | Deliverable |
-| --- | --- | --- |
-| [brainstorm](skills/brainstorm/SKILL.md) | Investigates the workspace and interviews you until the important decisions are settled. | An implementation spec at `docs/specs/yyyy-mm-dd-<slug>.md`. |
-| [implement](skills/implement/SKILL.md) | Builds from the spec using observable acceptance criteria, TDD, and separate spec and code reviews. | Implementation, validation results, and a completion report. |
-
-Brainstorming ends with a written handoff. Implementation starts in a fresh session so it can work from the spec without depending on the original conversation.
+Works with **Claude Code, Codex, Cursor, and OpenCode**.
 
 ## Install
 
-Install directly from this repository's GitHub URL with the [skills CLI](https://github.com/vercel-labs/skills). It downloads the source and installs the selected skills; no manual clone or file copying is needed.
-
-Prerequisites: Node.js 22.20 or newer (including `npx`), Git, and your chosen coding application.
-
-**Repository URL:** replace `OWNER/my-skills` below with this project's GitHub owner and repository name. These examples are templates until the public repository URL is configured.
-
-For an interactive installation, run this from your working project and choose your skills, hosts, and installation scope:
+Run this in your project's terminal:
 
 ```sh
-npx skills add https://github.com/OWNER/my-skills
+npx skills@latest add ngthluu/my-dev-skills
 ```
 
-Or install both skills for a particular host across your projects:
+Choose `brainstorm` and `implement`, select your coding agent, and pick project or global installation. The installer downloads everything for you—no manual cloning required. Restart your agent after installation.
 
-| Host | Command |
-| --- | --- |
-| Claude Code | `npx skills add OWNER/my-skills --skill brainstorm implement -a claude-code -g` |
-| Codex | `npx skills add OWNER/my-skills --skill brainstorm implement -a codex -g` |
-| Cursor | `npx skills add OWNER/my-skills --skill brainstorm implement -a cursor -g` |
-| OpenCode | `npx skills add OWNER/my-skills --skill brainstorm implement -a opencode -g` |
+Requires Node.js 22.20 or newer, Git, and your chosen coding application. See the [skills CLI documentation](https://github.com/vercel-labs/skills#install-a-skill).
 
-Install for all four hosts:
+## How to use
 
-```sh
-npx skills add OWNER/my-skills --skill brainstorm implement -a claude-code codex cursor opencode -g
-```
-
-Omit `-g` for a project installation. Review the installer's destination and replacement summary, particularly if skills with these names are already installed. Restart your host after installation.
-
-These commands install the skills directly. They do not register the repository's plugin manifests or require a marketplace listing.
-
-### Verify, update, or uninstall
-
-```sh
-# Preview the repository's skills without installing them
-npx skills add OWNER/my-skills --list
-
-# List globally installed skills
-npx skills list -g
-
-# Update these two globally installed skills
-npx skills update brainstorm implement -g
-
-# Remove these two globally installed skills
-npx skills remove brainstorm implement -g
-```
-
-For CLI options and supported agents, see the [installer reference](https://github.com/vercel-labs/skills#options).
-
-### Invoke the skills
-
-| Host | Start brainstorming | Implement a spec |
-| --- | --- | --- |
-| Claude Code | `/brainstorm` followed by your idea | `/implement` followed by the spec path |
-| Codex | `$brainstorm` followed by your idea | `$implement` followed by the spec path |
-| Cursor | Type `/` in Agent chat and select `brainstorm` | Select `implement` and provide the spec path |
-| OpenCode | Ask it to load `brainstorm` with its `skill` tool | Ask it to load `implement` with the spec path |
-
-### Local development
-
-Contributors can preview skill discovery from a checkout with `npx skills add . --list`, or install from it with `npx skills add .`. OpenCode also reads this repository's `opencode.json`, which points to `./skills`.
-
-Claude Code can load the checkout as a plugin for a session with `claude --plugin-dir /absolute/path/to/my-skills`. In that mode, its commands are `/my-skills:brainstorm` and `/my-skills:implement`. See [Claude Code plugins](https://code.claude.com/docs/en/plugins).
-
-## Usage
-
-Start with an idea:
+### 1. Brainstorm your idea
 
 ```text
 Use the brainstorm skill to design a searchable activity log for this project.
 ```
 
-Answer the questions, review the decisions, and confirm the final understanding. The skill writes a spec with requirements, acceptance criteria, and test seams.
+The agent investigates your project, asks questions, and helps settle the requirements. Once you confirm the decisions, it writes a spec to `docs/specs/yyyy-mm-dd-<slug>.md` with acceptance criteria and test seams.
 
-Start a fresh session in the same project:
+### 2. Implement the spec
+
+Start a **fresh session** in the same project:
 
 ```text
 Use the implement skill with docs/specs/2026-09-08-activity-log.md.
 ```
 
-Replace the example path with the spec you created. The implementation skill follows a red-to-green test cycle and reviews the result against both the spec and repository conventions.
+Replace the example path with your spec. The agent implements it with test-driven development, checks the result against the spec, and reviews the code. When subagents are available and permitted, it delegates implementation and independent reviews; otherwise, it works in the main session.
 
-The shared instructions use `$brainstorm` and `$implement` as shorthand; use your host's invocation syntax above. Delegation requires host support and repository permission. When subagents are unavailable, the implementation skill performs the work and reviews in the main session.
+You can also invoke the skills directly:
 
-## Repository structure
+| Agent | Brainstorm | Implement |
+| --- | --- | --- |
+| Claude Code | `/brainstorm` | `/implement` |
+| Codex | `$brainstorm` | `$implement` |
+| Cursor | Type `/` and select `brainstorm` | Type `/` and select `implement` |
+| OpenCode | Ask to load `brainstorm` with the `skill` tool | Ask to load `implement` with the `skill` tool |
 
-```text
-.claude-plugin/plugin.json     Claude Code plugin manifest
-.codex-plugin/plugin.json      Codex plugin manifest
-.cursor-plugin/plugin.json     Cursor plugin manifest
-opencode.json                  OpenCode skill discovery configuration
-skills/
-  brainstorm/
-    SKILL.md
-    agents/openai.yaml
-    references/visual-workspace.md
-  implement/
-    SKILL.md
-    agents/openai.yaml
-LICENSE
-```
-
-`skills/` is the shared source of truth. No build step or external service is required by this skill pack. The manifests support host-specific packaging; direct installation above does not require a marketplace listing. Host applications, models, and project tooling have their own requirements.
+Include your idea or spec path after selecting the skill. The shared skill instructions use `$brainstorm` and `$implement` as shorthand; use your agent's syntax above.
 
 ## Contributing
 
-Issues and pull requests are welcome. Describe the workflow problem, the expected behavior, and an example that demonstrates the change. Edit skills in `skills/` rather than maintaining separate copies for each host. Keep supporting references relative to their skill directory and preserve the spec handoff between brainstorming and implementation.
+[Issues](https://github.com/ngthluu/my-dev-skills/issues) and pull requests are welcome. Describe the problem, expected behavior, and how you tested your change.
 
-For compatibility changes, identify the host and version you tested. Validate JSON configuration and skill frontmatter, and verify that installation preserves supporting files. Installation layout checks do not replace testing skill discovery and behavior inside the host.
+The shared instructions live in [skills/brainstorm](skills/brainstorm/SKILL.md) and [skills/implement](skills/implement/SKILL.md). Edit them there; all four agents use the same files. Keep supporting references inside the skill folder and test discovery in the agent you changed.
 
 ## License
 
