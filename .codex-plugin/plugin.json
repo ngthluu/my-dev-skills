@@ -1,0 +1,26 @@
+{
+  "name": "my-skills",
+  "version": "0.1.0+codex.20260908042523",
+  "description": "Turn ideas into durable specs, then implement them with TDD and independent code review.",
+  "author": {
+    "name": "Luu Nguyen"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "My Skills",
+    "shortDescription": "Brainstorm specs and implement them with TDD.",
+    "longDescription": "My Skills provides a two-stage workflow: exhaustively clarify an idea into a reusable spec, then implement that spec with test-driven development and independent review.",
+    "developerName": "Luu Nguyen",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Write",
+      "Multi-agent"
+    ],
+    "defaultPrompt": [
+      "Use $brainstorm to turn this idea into an implementation-ready spec.",
+      "Use $implement to build the work described by this spec."
+    ]
+  },
+  "license": "MIT"
+}

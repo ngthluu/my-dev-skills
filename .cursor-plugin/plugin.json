@@ -1,0 +1,10 @@
+{
+  "name": "my-skills",
+  "version": "0.1.0",
+  "description": "Turn ideas into durable specs, then implement them with TDD and independent code review.",
+  "author": {
+    "name": "Luu Nguyen"
+  },
+  "skills": "./skills/",
+  "license": "MIT"
+}
