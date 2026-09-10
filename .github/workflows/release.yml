@@ -25,6 +25,10 @@ jobs:
         with:
           node-version: "22"
           cache: npm
+      - name: Validate release tag matches plugin versions
+        env:
+          RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+        run: node scripts/version.mjs validate "$RELEASE_TAG"
       - run: npm ci --ignore-scripts
       - run: npx playwright install --with-deps chromium
       - name: Validate committed tag, run required tests, publish, and reconcile latest

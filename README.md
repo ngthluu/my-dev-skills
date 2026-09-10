@@ -13,12 +13,12 @@ Run this in your project's terminal:
 npx skills@latest add https://github.com/ngthluu/my-dev-skills/tree/latest
 
 # Pin an immutable release
-npx skills@latest add https://github.com/ngthluu/my-dev-skills/tree/v0.2.0
+npx skills@latest add https://github.com/ngthluu/my-dev-skills/tree/v0.1.0
 ```
 
-Choose `brainstorm`, `implement`, and/or `debug`, select your coding agent, and pick project or global installation. Restart your agent after installation. The `v0.2.0` and `latest` refs become available after the first release is published; a missing ref is an installation error, not a reason to install the development branch.
+Choose `brainstorm`, `implement`, and/or `debug`, select your coding agent, and pick project or global installation. Restart your agent after installation. The `v0.1.0` and `latest` refs become available after the first release is published; a missing ref is an installation error, not a reason to install the development branch.
 
-`skills@latest` selects the **installer package**. `tree/latest` selects this repository's **stable release branch**, pointing to the exact commit of the highest published stable version. `tree/v0.2.0` selects an immutable release tag. Prereleases do not advance `latest`.
+`skills@latest` selects the **installer package**. `tree/latest` selects this repository's **stable release branch**, pointing to the exact commit of the highest published stable version. `tree/v0.1.0` selects an immutable release tag. Prereleases do not advance `latest`.
 
 For a noninteractive project install, select skills and agents explicitly:
 
@@ -30,7 +30,7 @@ Use `--global` for user-wide installation, and `--copy` if you prefer copies ove
 
 ## Upgrade or restore a release
 
-Reinstall from `tree/latest` with the same skills, agents, and project/global scope to upgrade. Reinstall from `tree/v0.2.0` to select or restore that exact release. To restore another published version, replace `v0.2.0` with its tag from [Releases](https://github.com/ngthluu/my-dev-skills/releases). Restart the agent to reload the installed instructions. Do not rely on the installer's generic `update` command to preserve a release pin.
+Reinstall from `tree/latest` with the same skills, agents, and project/global scope to upgrade. Reinstall from `tree/v0.1.0` to select or restore that exact release. To restore another published version, replace `v0.1.0` with its tag from [Releases](https://github.com/ngthluu/my-dev-skills/releases). Restart the agent to reload the installed instructions. Do not rely on the installer's generic `update` command to preserve a release pin.
 
 For development-branch installation only:
 

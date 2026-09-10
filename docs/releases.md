@@ -9,8 +9,8 @@ Use a single `origin` URL on `github.com`: HTTPS, `git@github.com:owner/repo.git
 Prepare the first release:
 
 ```sh
-node scripts/version.mjs set 0.2.0
-node scripts/version.mjs validate v0.2.0
+node scripts/version.mjs set 0.1.0
+node scripts/version.mjs validate v0.1.0
 npm test
 git diff
 ```
@@ -19,15 +19,15 @@ The setter updates all three plugin manifest versions and preserves their other 
 
 ```sh
 git add <reviewed-files>
-git commit -m "Prepare v0.2.0"
-git tag -a v0.2.0 -m "v0.2.0"
+git commit -m "Prepare v0.1.0"
+git tag -a v0.1.0 -m "v0.1.0"
 git push origin HEAD
-git push origin v0.2.0
+git push origin v0.1.0
 ```
 
 These are maintainer actions; implementation of the spec does not authorize running them. Never recreate, force-push, or move an existing version tag. Correct a bad published release with a new version.
 
-The release workflow checks out the tag and runs `node scripts/release.mjs v0.2.0`. This command checks the remote tag's commit against the local immutable tag, validates **committed** manifests, and runs all committed `tests/*.test.mjs` in a detached temporary worktree before publication. When a lockfile exists, it installs that commit's development dependencies with `npm ci --ignore-scripts`. Failed checks prevent publication. The working directory's uncommitted files cannot substitute for release contents. It creates a GitHub Release using the already-pushed tag (`--verify-tag`); it never creates or rewrites remote version tags.
+The release workflow checks out the tag and runs `node scripts/release.mjs v0.1.0`. This command checks the remote tag's commit against the local immutable tag, validates **committed** manifests, and runs all committed `tests/*.test.mjs` in a detached temporary worktree before publication. When a lockfile exists, it installs that commit's development dependencies with `npm ci --ignore-scripts`. Failed checks prevent publication. The working directory's uncommitted files cannot substitute for release contents. It creates a GitHub Release using the already-pushed tag (`--verify-tag`); it never creates or rewrites remote version tags.
 
 After successful publication, the command queries every page of GitHub Releases and reconciles `latest`. Updates use an explicit Git compare-and-swap lease. A losing concurrent writer rereads both release records and the branch before retrying, so an older job cannot overwrite a newer published version. Workflow serialization additionally reduces contention; correctness does not depend on job ordering. A retry recognizes an existing published release and does not duplicate it. The repository's `latest` branch is independent of GitHub's UI “Latest” badge.
 
@@ -35,10 +35,12 @@ Repository prerequisites: GitHub Actions must allow `contents: write`; repositor
 
 ## Failure recovery
 
+If validation reports `inconsistent manifest version`, the tag points to a commit whose plugin versions do not match the tag. Editing the development branch or rerunning the workflow cannot repair that committed mismatch. Prepare a corrected release commit and use a new matching version tag under the immutable-tag policy. Replacing an existing failed release tag requires an explicit maintainer decision to make an exception to that policy.
+
 Release publication and the branch update cannot be atomic. A failed/uncertain publication leaves `latest` untouched and reports failure. A successful publication followed by a rejected branch push reports a partial failure; users may still install the immutable tag. Inspect the GitHub Release, workflow output, and repository rules or credentials. Fix the external cause, then rerun the failed workflow or dispatch **Release** with the same existing tag. Locally, from the reviewed release checkout with its dependencies/browser available:
 
 ```sh
-node scripts/release.mjs v0.2.0
+node scripts/release.mjs v0.1.0
 ```
 
 The retry revalidates and reruns checks, confirms existing publication, and reconciles the highest published stable version. If a draft Release already exists, resolve its state explicitly in GitHub before retrying; the command will not silently publish a draft. A network failure while listing Releases fails the job and can be retried the same way. Never repair partial failure by moving the version tag or manually pointing `latest` to development work.
