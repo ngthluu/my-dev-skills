@@ -1,7 +1,7 @@
 {
   "name": "my-skills",
-  "version": "0.1.0",
-  "description": "Turn ideas into durable specs, then implement them with TDD and independent code review.",
+  "version": "0.2.0",
+  "description": "Brainstorm durable specs, implement with TDD and independent review, and debug from evidence to verified fixes.",
   "author": {
     "name": "Luu Nguyen"
   },

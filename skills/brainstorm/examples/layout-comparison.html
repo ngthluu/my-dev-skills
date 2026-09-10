@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'"
+    />
+    <title>my-skills · Decision workspace</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --page: #f4f5f7;
+        --panel: #fff;
+        --ink: #17212f;
+        --muted: #4a5667;
+        --line: #728094;
+        --accent: #1753a6;
+        --wash: #e8f0fd;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --page: #151b24;
+          --panel: #202936;
+          --ink: #f1f4fa;
+          --muted: #bdc9da;
+          --line: #8190a5;
+          --accent: #9bc3ff;
+          --wash: #293c57;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--page);
+        color: var(--ink);
+        font:
+          16px/1.55 system-ui,
+          sans-serif;
+      }
+      main {
+        max-width: 1100px;
+        margin: auto;
+        padding: 32px 20px 60px;
+      }
+      h1 {
+        font-size: clamp(1.7rem, 4vw, 2.5rem);
+        line-height: 1.2;
+      }
+      h2,
+      legend {
+        font-size: 1.2rem;
+        font-weight: 650;
+      }
+      .eyebrow {
+        font-size: 0.8rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .muted {
+        color: var(--muted);
+      }
+      fieldset {
+        padding: 0;
+        border: 0;
+        min-width: 0;
+        margin: 28px 0;
+      }
+      legend {
+        margin-bottom: 16px;
+      }
+      .cards,
+      .split {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+      }
+      .card,
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 20px;
+        min-width: 0;
+      }
+      .card {
+        cursor: pointer;
+        display: block;
+      }
+      .card:has(input:checked) {
+        border: 2px solid var(--accent);
+        padding: 19px;
+        background: var(--wash);
+      }
+      .card:has(input:checked) .selection::after {
+        content: " · Selected";
+      }
+      .card-title {
+        font-weight: 650;
+        display: block;
+        margin-bottom: 12px;
+      }
+      input[type="radio"] {
+        accent-color: var(--accent);
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+        margin: 0 8px 0 0;
+      }
+      :focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 5px;
+      }
+      .badge {
+        display: inline-block;
+        font-size: 0.8rem;
+        border: 1px solid var(--accent);
+        border-radius: 4px;
+        padding: 1px 6px;
+        margin: 4px 8px 4px 0;
+        color: var(--accent);
+      }
+      .mockup {
+        display: block;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+        margin: 16px 0;
+        font-size: 0.85rem;
+      }
+      .mock-nav,
+      .mock-sidebar {
+        display: block;
+        background: var(--wash);
+        padding: 12px;
+      }
+      .mock-body {
+        display: flex;
+        min-height: 140px;
+      }
+      .mock-sidebar {
+        flex: 0 0 32%;
+        border-right: 1px solid var(--line);
+      }
+      .mock-content {
+        display: block;
+        padding: 16px;
+        flex: 1;
+        min-width: 0;
+      }
+      .mock-row {
+        display: block;
+        border-bottom: 1px solid var(--line);
+        padding: 7px 0;
+      }
+      .mock-button {
+        display: inline-block;
+        border: 1px solid var(--accent);
+        padding: 4px 9px;
+        border-radius: 4px;
+        margin: 8px 0;
+      }
+      .consequence {
+        display: block;
+        color: var(--muted);
+        margin-top: 12px;
+      }
+      .actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+      button {
+        font: inherit;
+        color: var(--ink);
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        min-height: 44px;
+        padding: 8px 16px;
+        cursor: pointer;
+      }
+      textarea {
+        display: block;
+        width: 100%;
+        min-height: 110px;
+        resize: vertical;
+        font: inherit;
+        background: var(--page);
+        color: var(--ink);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 12px;
+        margin-top: 8px;
+      }
+      footer {
+        margin-top: 28px;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+      @media (max-width: 650px) {
+        .cards,
+        .split {
+          grid-template-columns: 1fr;
+        }
+        main {
+          padding: 24px 16px;
+        }
+        .card,
+        .panel {
+          padding: 16px;
+        }
+        .card:has(input:checked) {
+          padding: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="eyebrow">my-skills / brainstorm / temporary decision aid</p>
+        <h1>Choose a workspace layout</h1>
+        <p>Outcome: help a new teammate find a project and its next task.</p>
+        <p class="muted">
+          Updated <time datetime="2026-09-10">2026-09-10</time> · Synthetic
+          project data · Local exploration only
+        </p>
+      </header>
+      <form id="decisions">
+        <fieldset>
+          <legend>
+            Q1 · Which navigation layout makes the next task easier to find?
+          </legend>
+          <div class="cards">
+            <label class="card"
+              ><span class="card-title"
+                ><input type="radio" name="Q1" value="Q1-A" />Q1-A · Sidebar
+                workspace</span
+              ><span class="badge">Recommended</span
+              ><span class="selection">Option A</span>
+              <span
+                class="mockup"
+                aria-label="Sidebar preview: persistent project navigation beside tasks"
+                ><span class="mock-nav">Acorn projects</span
+                ><span class="mock-body"
+                  ><span class="mock-sidebar"
+                    >Overview<br />Projects<br />Tasks</span
+                  ><span class="mock-content"
+                    ><strong>Website</strong
+                    ><span class="mock-row">Draft homepage</span
+                    ><span class="mock-row">Review navigation</span></span
+                  ></span
+                ></span
+              >
+              <span class="consequence"
+                >Persistent orientation and quick switching; leaves less room
+                for task details on a small screen.</span
+              ></label
+            >
+            <label class="card"
+              ><span class="card-title"
+                ><input type="radio" name="Q1" value="Q1-B" />Q1-B · Focused
+                task list</span
+              ><span class="selection">Option B</span>
+              <span
+                class="mockup"
+                aria-label="Focused preview: top project navigation above a full-width task list"
+                ><span class="mock-nav">Acorn / Website ▾</span
+                ><span class="mock-content"
+                  ><strong>Next task</strong
+                  ><span class="mock-row">Draft homepage</span
+                  ><span class="mock-button">View task →</span
+                  ><span class="mock-row">Then: Review navigation</span></span
+                ></span
+              >
+              <span class="consequence"
+                >More space for the current task; switching projects takes an
+                extra step.</span
+              ></label
+            >
+          </div>
+        </fieldset>
+        <section class="panel" aria-labelledby="reply-heading">
+          <h2 id="reply-heading">Reply in chat</h2>
+          <p>
+            Selections stay in this page. Copy or select the summary and send it
+            in chat to confirm your decisions.
+          </p>
+          <label for="answers">Answer summary</label
+          ><textarea id="answers" readonly>No selections yet.</textarea>
+          <div class="actions">
+            <button type="button" id="copy">Copy answers</button
+            ><button type="reset">Reset exploration</button>
+          </div>
+          <p role="status" id="status" aria-live="polite">
+            Nothing has been submitted.
+          </p>
+        </section>
+      </form>
+      <footer>
+        The confirmed Markdown spec will be the durable record. This page does
+        not save or send browser activity.
+      </footer>
+    </main>
+    <script>
+      const form = document.getElementById("decisions");
+      const answers = document.getElementById("answers");
+      const status = document.getElementById("status");
+      function updateSummary() {
+        const choices = [
+          ...form.querySelectorAll('input[type="radio"]:checked'),
+        ];
+        answers.value = choices.length
+          ? choices.map((input) => `${input.name}: ${input.value}`).join("\n")
+          : "No selections yet.";
+        status.textContent =
+          "Local exploration only. Send your answers in chat.";
+      }
+      form.addEventListener("change", updateSummary);
+      form.addEventListener("reset", () => {
+        answers.value = "No selections yet.";
+        status.textContent = "Exploration reset. Nothing has been submitted.";
+      });
+      document.getElementById("copy").addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(answers.value);
+          status.textContent = "Copied. Paste your answers in chat to confirm.";
+        } catch {
+          answers.focus();
+          answers.select();
+          status.textContent =
+            "Clipboard unavailable. Select and copy the summary, then paste it in chat.";
+        }
+      });
+    </script>
+  </body>
+</html>

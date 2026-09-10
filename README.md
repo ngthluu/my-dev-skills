@@ -1,57 +1,89 @@
 # My Dev Skills
 
-Two skills for turning an idea into working software: **brainstorm** the spec, then **implement** it with tests and code review.
+Three shared skills: **brainstorm** an implementation-ready spec, **implement** it with tests and independent review, and **debug** unexpected behavior from evidence to a verified fix.
 
 Works with **Claude Code, Codex, Cursor, and OpenCode**.
 
-## Install
+## Install a release
 
 Run this in your project's terminal:
+
+```sh
+# Latest stable published release
+npx skills@latest add https://github.com/ngthluu/my-dev-skills/tree/latest
+
+# Pin an immutable release
+npx skills@latest add https://github.com/ngthluu/my-dev-skills/tree/v0.2.0
+```
+
+Choose `brainstorm`, `implement`, and/or `debug`, select your coding agent, and pick project or global installation. Restart your agent after installation. The `v0.2.0` and `latest` refs become available after the first release is published; a missing ref is an installation error, not a reason to install the development branch.
+
+`skills@latest` selects the **installer package**. `tree/latest` selects this repository's **stable release branch**, pointing to the exact commit of the highest published stable version. `tree/v0.2.0` selects an immutable release tag. Prereleases do not advance `latest`.
+
+For a noninteractive project install, select skills and agents explicitly:
+
+```sh
+npx skills@latest add https://github.com/ngthluu/my-dev-skills/tree/latest --skill brainstorm implement debug --agent claude-code codex cursor opencode -y
+```
+
+Use `--global` for user-wide installation, and `--copy` if you prefer copies over the installer's default symlinks. Requires Node.js 22.20 or newer, Git, and your chosen coding application. The installation checks use published CLI `1.5.25`.
+
+## Upgrade or restore a release
+
+Reinstall from `tree/latest` with the same skills, agents, and project/global scope to upgrade. Reinstall from `tree/v0.2.0` to select or restore that exact release. To restore another published version, replace `v0.2.0` with its tag from [Releases](https://github.com/ngthluu/my-dev-skills/releases). Restart the agent to reload the installed instructions. Do not rely on the installer's generic `update` command to preserve a release pin.
+
+For development-branch installation only:
 
 ```sh
 npx skills@latest add ngthluu/my-dev-skills
 ```
 
-Choose `brainstorm` and `implement`, select your coding agent, and pick project or global installation. The installer downloads everything for you—no manual cloning required. Restart your agent after installation.
-
-Requires Node.js 22.20 or newer, Git, and your chosen coding application. See the [skills CLI documentation](https://github.com/vercel-labs/skills#install-a-skill).
+Installer or network errors must be resolved and the requested command retried; do not switch sources silently. Existing installations stay unchanged until reinstalled. The skills CLI installs the shared skill files directly; plugin marketplace caches are a separate installation mechanism. The three plugin manifests now share the release version without a Codex timestamp suffix. If a plugin-managed installation remains stale, use that application's supported plugin refresh/reinstall flow and restart it; do not edit version metadata to bypass its cache.
 
 ## How to use
 
-### 1. Brainstorm your idea
+### Brainstorm an idea
 
 ```text
 Use the brainstorm skill to design a searchable activity log for this project.
 ```
 
-The agent investigates your project, asks questions, and helps settle the requirements. Once you confirm the decisions, it writes a spec to `docs/specs/yyyy-mm-dd-<slug>.md` with acceptance criteria and test seams.
+The agent investigates the project and explores requirements in decision rounds. When seeing alternatives helps, it creates a temporary offline HTML decision aid with keyboard selection and a copyable answer summary. Submit choices in chat; browser selections are advisory. After your final confirmation, it writes the canonical spec to `docs/specs/yyyy-mm-dd-<slug>.md`, including acceptance criteria and test seams.
 
-### 2. Implement the spec
+### Implement the spec
 
 Start a **fresh session** in the same project:
 
 ```text
-Use the implement skill with docs/specs/2026-09-08-activity-log.md.
+Use the implement skill with docs/specs/2026-09-10-activity-log.md.
 ```
 
-Replace the example path with your spec. The agent implements it with test-driven development, checks the result against the spec, and reviews the code. When subagents are available and permitted, it delegates implementation and independent reviews; otherwise, it works in the main session.
+Replace the path with your spec. The agent implements with TDD and independently reviews spec compliance and code quality. It delegates when subagents are available and permitted; otherwise it works in the main session.
 
-You can also invoke the skills directly:
+### Debug a reported problem
 
-| Agent | Brainstorm | Implement |
-| --- | --- | --- |
-| Claude Code | `/brainstorm` | `/implement` |
-| Codex | `$brainstorm` | `$implement` |
-| Cursor | Type `/` and select `brainstorm` | Type `/` and select `implement` |
-| OpenCode | Ask to load `brainstorm` with the `skill` tool | Ask to load `implement` with the `skill` tool |
+```text
+Use the debug skill: the activity log repeats the last item when I load the next page.
+```
 
-Include your idea or spec path after selecting the skill. The shared skill instructions use `$brainstorm` and `$implement` as shorthand; use your agent's syntax above.
+Debug works in the current session without a brainstorm spec. It reproduces the symptom, investigates root cause, observes a failing regression signal, makes the smallest supported fix, and verifies the original scenario. For flaky or performance problems it measures repeated behavior. If reproduction or access is missing, it gathers evidence and reports the specific blocker without claiming a speculative fix.
 
-## Contributing
+| Agent | Brainstorm | Implement | Debug |
+| --- | --- | --- | --- |
+| Claude Code | `/brainstorm` | `/implement` | `/debug` |
+| Codex | `$brainstorm` | `$implement` | `$debug` |
+| Cursor | Type `/` and select `brainstorm` | Type `/` and select `implement` | Type `/` and select `debug` |
+| OpenCode | Ask to load `brainstorm` with the `skill` tool | Ask to load `implement` with the `skill` tool | Ask to load `debug` with the `skill` tool |
 
-[Issues](https://github.com/ngthluu/my-dev-skills/issues) and pull requests are welcome. Describe the problem, expected behavior, and how you tested your change.
+Include your idea, spec path, or bug report after selecting the skill. Shared instructions use `$brainstorm`, `$implement`, and `$debug` as shorthand; use your agent's syntax above.
 
-The shared instructions live in [skills/brainstorm](skills/brainstorm/SKILL.md) and [skills/implement](skills/implement/SKILL.md). Edit them there; all four agents use the same files. Keep supporting references inside the skill folder and test discovery in the agent you changed.
+## Contributing and releasing
+
+[Issues](https://github.com/ngthluu/my-dev-skills/issues) and pull requests are welcome. Describe the problem, expected behavior, and verification. Edit the shared [brainstorm](skills/brainstorm/SKILL.md), [implement](skills/implement/SKILL.md), and [debug](skills/debug/SKILL.md) instructions in their owning folders. Keep references, templates, and examples inside each skill so installation carries them along.
+
+Run `npm ci`, `npx playwright install chromium`, and `npm test` for release tooling, real installer fixtures, and offline browser checks. These development dependencies are not needed to use the skills. Also run `npm run validate` and `git diff --check`. No application build or typecheck is defined. Scenario evaluations of agent behavior are separate from installation and deterministic tooling checks; see [validation evidence](docs/validation.md).
+
+See the [maintainer release guide](docs/releases.md) for version selection, validation, review/commit/tag/push steps, required repository permissions, publication recovery, and the first remote installation smoke test. Preparing a version locally does not publish it.
 
 ## License
 

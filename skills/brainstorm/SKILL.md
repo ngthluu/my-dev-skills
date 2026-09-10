@@ -25,9 +25,9 @@ Keep dependent questions for later rounds. Challenge vague goals, implicit behav
 
 ## Use a visual decision workspace when it helps
 
-Keep chat as the input channel, but create a temporary browser-based view when spatial, stateful, comparative, or quantitative relationships are becoming hard to judge in prose. Good signals include flows or dependencies, state transitions, three or more meaningful alternatives, UI layout decisions, or acceptance criteria whose coverage is difficult to scan.
+Keep chat as the input channel, but create a temporary browser-based view when spatial, stateful, comparative, or quantitative relationships are becoming hard to judge in prose. Good signals include flows or dependencies, state transitions, visual comparisons between meaningful alternatives, UI layout decisions, or acceptance criteria whose coverage is difficult to scan.
 
-Read [references/visual-workspace.md](references/visual-workspace.md) before creating one. The visual workspace is a disposable decision aid, not implementation and not a second source of truth. Give questions and decisions stable IDs so the user can inspect the browser view and answer in chat. Update it only when the decision model changes materially and once more before final confirmation.
+Read [references/visual-workspace.md](references/visual-workspace.md) before creating one. The visual workspace is a disposable decision aid, not implementation and not a second source of truth. Use its packaged standalone template and examples when helpful. Give questions and options stable IDs so the user can explore the browser view and copy an answer summary into chat; browser selections alone do not settle decisions. Update it only when the decision model changes materially and once more before final confirmation.
 
 Do not create a visual merely because the brainstorm is long. When prose or a compact Markdown table communicates the issue just as well, keep the round in chat.
 

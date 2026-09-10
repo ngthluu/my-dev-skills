@@ -1,0 +1,17 @@
+{
+  "name": "my-dev-skills-checks",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "validate": "node scripts/version.mjs validate",
+    "test:install": "node --test tests/install.test.mjs"
+  },
+  "engines": {
+    "node": ">=22.20.0"
+  },
+  "devDependencies": {
+    "playwright": "1.58.2",
+    "skills": "1.5.25",
+    "yaml": "2.8.3"
+  }
+}
