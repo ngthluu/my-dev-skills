@@ -1,6 +1,6 @@
 {
   "name": "my-skills",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Brainstorm durable specs, implement with TDD and independent review, and debug from evidence to verified fixes.",
   "author": {
     "name": "Luu Nguyen"
