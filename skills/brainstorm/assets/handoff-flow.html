@@ -1,11 +1,6 @@
 <!doctype html>
-<html lang="en"><head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
-    <title>Where review happens</title>
-
-  <style>/* Pico CSS v2.1.1 — https://github.com/picocss/pico
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'"><title>Who hands off a draft for publication?</title><style>/* Pico CSS v2.1.1 — https://github.com/picocss/pico
 MIT License
 
 Copyright (c) 2019-2024 Pico
@@ -43,36 +38,21 @@ body{background:var(--page);color:var(--ink)} main{max-width:1200px;margin:auto;
 .cards>.card:nth-child(2),.split>.panel:nth-child(2){border-color:#7660b5;background:var(--panel)}
 .cards>.card .badge{background:#17665b;color:#fff}.cards>.card:nth-child(2) .badge{background:#66509d;color:#fff}
 @media(prefers-color-scheme:dark){.cards>.card,.split>.panel{border-color:#62b9a8;background:var(--panel)}.cards>.card:nth-child(2),.split>.panel:nth-child(2){border-color:#ad94e2;background:var(--panel)}.cards>.card .badge{background:#a3e0cf;color:#123c35}.cards>.card:nth-child(2) .badge{background:#d5c3fc;color:#302048}}
+</style><style>
+.diagram{width:100%;max-width:none;min-width:800px;height:auto}.diagram text{font-size:16px}.diagram .label{font-size:14px;fill:var(--muted)}.diagram .heading{font-weight:700}.diagram .boundary{fill:none;stroke:var(--muted);stroke-dasharray:8 5}.diagram .lane{stroke:var(--line);stroke-width:1;stroke-dasharray:5 5}.diagram .retry{stroke-dasharray:6 4}.diagram .status{font-size:13px;font-weight:700;letter-spacing:.06em}.diagram .open{stroke:var(--accent);stroke-width:3}.diagram .blocked{stroke:var(--muted);stroke-dasharray:7 4}.diagram .deferred{fill:var(--panel);stroke:var(--muted);stroke-dasharray:2 4}.diagram-scroll{overflow-x:auto;border-radius:6px}.scroll-hint{display:none;margin:12px 0 0}@media(max-width:901px){.scroll-hint{display:block}}.supporting{margin-top:20px}h1{color:var(--ink)}
 </style></head>
-  <body>
-    <main>
-      <header><p class="eyebrow">Example · Proposed</p>
-
-        <h1>Where review happens</h1>
-
-
-      </header>
-      <div id="decisions">
-        <section>
-
-          <div class="cards">
-            <div class="card"><span class="card-title">Separate
-                review step</span><span class="badge">Recommended</span>
-              <span class="mockup" aria-label="Separate review preview: draft, review, and publish occupy distinct steps"><span class="mock-nav">Draft → Review → Publish</span><span class="mock-content"><strong>Step 2 · Review draft</strong><span class="mock-row">Title: Welcome</span><span class="mock-row">Audience: Team</span><span class="mock-button">Continue to publish →</span></span></span>
-              <span class="consequence">Review is a clear step. To edit, go back to the draft.</span></div>
-            <div class="card"><span class="card-title">Inline
-                review</span>
-              <span class="mockup" aria-label="Inline review preview: draft and review share one page"><span class="mock-nav">Draft and review</span><span class="mock-body"><span class="mock-content"><strong>Draft</strong><span class="mock-row">Welcome</span></span><span class="mock-content"><strong>Preview</strong><span class="mock-row">Welcome</span></span></span><span class="mock-nav">Publish when ready →</span></span>
-              <span class="consequence">See the preview while editing. Review is easier to skip.</span></div>
-          </div>
-        </section>
-
-      </div>
-
-    </main>
-
-
-
-
-
-</body></html>
+<body><main><header><p class="eyebrow">Example · Proposed</p><h1>Who hands off a draft for publication?</h1><p>Actor lanes show responsibility; numbered exchanges show order, including a conditional failure and retry.</p></header>
+<section class="panel"><div class="diagram-scroll" tabindex="0" role="region" aria-label="Who hands off a draft for publication?; scroll horizontally on small screens"><svg class="diagram" viewBox="0 0 900 570" role="img" aria-labelledby="handoff-title handoff-desc"><title id="handoff-title">Publishing handoffs between author, reviewer, and publishing service</title><desc id="handoff-desc">Time runs downward. The author submits a draft to the reviewer. The reviewer approves the revision and requests publication. If publication fails, the service reports a retryable failure to the reviewer. The reviewer retries the same approved revision. On success the service returns a published URL to the author.</desc><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z"></path></marker></defs>
+<rect x="25" y="15" width="220" height="50" rx="8"/><text class="heading" x="135" y="46" text-anchor="middle">Author</text>
+<rect x="330" y="15" width="220" height="50" rx="8"/><text class="heading" x="440" y="46" text-anchor="middle">Reviewer</text>
+<rect x="635" y="15" width="240" height="50" rx="8"/><text class="heading" x="755" y="46" text-anchor="middle">Publishing service</text>
+<path class="lane" d="M135 65 V545 M440 65 V545 M755 65 V545"/>
+<path d="M135 130 H440" marker-end="url(#arrow)"/><text x="287" y="112" text-anchor="middle">1. Submit draft</text>
+<rect x="340" y="165" width="200" height="48" rx="8"/><text x="440" y="195" text-anchor="middle">2. Review and approve</text>
+<path d="M440 265 H755" marker-end="url(#arrow)"/><text x="598" y="247" text-anchor="middle">3. Publish approved revision</text>
+<path class="retry" d="M755 340 H440" marker-end="url(#arrow)"/><text x="598" y="322" text-anchor="middle">4. Retryable failure (if any)</text>
+<path class="retry" d="M440 415 H755" marker-end="url(#arrow)"/><text x="598" y="397" text-anchor="middle">5. Retry same revision</text>
+<path d="M755 510 H135" marker-end="url(#arrow)"/><text x="445" y="490" text-anchor="middle">6. Published URL (after initial success or successful retry)</text>
+</svg></div><p class="small scroll-hint">On narrow screens, focus the diagram and use the arrow keys, or scroll horizontally.</p></section>
+<section class="panel supporting"><h2>Reading this diagram</h2><ul><li>Steps 4 and 5 occur only after a retryable publication failure. A successful initial publish goes directly from step 3 to step 6.</li><li>A retry uses the same approved revision and request identity so repeated requests cannot create duplicate publications.</li><li>Review rejection and non-retryable failures need separate paths before this becomes a complete specification.</li></ul></section>
+</main></body></html>

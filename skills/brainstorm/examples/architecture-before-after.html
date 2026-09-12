@@ -1,11 +1,6 @@
 <!doctype html>
-<html lang="en"><head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
-    <title>Where review happens</title>
-
-  <style>/* Pico CSS v2.1.1 — https://github.com/picocss/pico
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'"><title>Put order creation behind one interface</title><style>/* Pico CSS v2.1.1 — https://github.com/picocss/pico
 MIT License
 
 Copyright (c) 2019-2024 Pico
@@ -44,35 +39,4 @@ body{background:var(--page);color:var(--ink)} main{max-width:1200px;margin:auto;
 .cards>.card .badge{background:#17665b;color:#fff}.cards>.card:nth-child(2) .badge{background:#66509d;color:#fff}
 @media(prefers-color-scheme:dark){.cards>.card,.split>.panel{border-color:#62b9a8;background:var(--panel)}.cards>.card:nth-child(2),.split>.panel:nth-child(2){border-color:#ad94e2;background:var(--panel)}.cards>.card .badge{background:#a3e0cf;color:#123c35}.cards>.card:nth-child(2) .badge{background:#d5c3fc;color:#302048}}
 </style></head>
-  <body>
-    <main>
-      <header><p class="eyebrow">Example · Proposed</p>
-
-        <h1>Where review happens</h1>
-
-
-      </header>
-      <div id="decisions">
-        <section>
-
-          <div class="cards">
-            <div class="card"><span class="card-title">Separate
-                review step</span><span class="badge">Recommended</span>
-              <span class="mockup" aria-label="Separate review preview: draft, review, and publish occupy distinct steps"><span class="mock-nav">Draft → Review → Publish</span><span class="mock-content"><strong>Step 2 · Review draft</strong><span class="mock-row">Title: Welcome</span><span class="mock-row">Audience: Team</span><span class="mock-button">Continue to publish →</span></span></span>
-              <span class="consequence">Review is a clear step. To edit, go back to the draft.</span></div>
-            <div class="card"><span class="card-title">Inline
-                review</span>
-              <span class="mockup" aria-label="Inline review preview: draft and review share one page"><span class="mock-nav">Draft and review</span><span class="mock-body"><span class="mock-content"><strong>Draft</strong><span class="mock-row">Welcome</span></span><span class="mock-content"><strong>Preview</strong><span class="mock-row">Welcome</span></span></span><span class="mock-nav">Publish when ready →</span></span>
-              <span class="consequence">See the preview while editing. Review is easier to skip.</span></div>
-          </div>
-        </section>
-
-      </div>
-
-    </main>
-
-
-
-
-
-</body></html>
+<body><main><header><p class="eyebrow">Example · Proposed</p><h1>Put order creation behind one interface</h1></header><section class="panel"><div tabindex="0" role="region" aria-label="Diagram; scroll horizontally on narrow screens" style="overflow-x:auto"><svg class="diagram" style="min-width:680px;max-width:850px" viewBox="0 0 760 430" role="img" aria-labelledby="diagram-title"><title id="diagram-title">Now the checkout caller coordinates validation, pricing, and saving. Proposed: placeOrder owns those internal steps within the order module.</title><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z"/></marker></defs><text x="185" y="30" text-anchor="middle">Now: three public calls</text><text x="570" y="30" text-anchor="middle">Proposed: one public call</text><rect x="90" y="60" width="240" height="48" rx="8"/><text x="210.0" y="90" text-anchor="middle">Checkout caller</text><rect x="90" y="170" width="240" height="48" rx="8"/><text x="210.0" y="200" text-anchor="middle">Validate order</text><rect x="90" y="270" width="240" height="48" rx="8"/><text x="210.0" y="300" text-anchor="middle">Calculate price</text><rect x="90" y="370" width="240" height="48" rx="8"/><text x="210.0" y="400" text-anchor="middle">Save order</text><path d="M180 108 V165" marker-end="url(#arrow)"/><text x="190" y="145">1</text><path d="M90 84 H55 V294 H85" marker-end="url(#arrow)"/><text x="30" y="230">2</text><path d="M90 84 H15 V394 H85" marker-end="url(#arrow)"/><text x="25" y="360">3</text><rect x="405" y="150" width="340" height="268" rx="12" style="fill:none;stroke:var(--accent);stroke-width:2;stroke-dasharray:6 4"/><rect x="445" y="60" width="250" height="48" rx="8"/><text x="570.0" y="90" text-anchor="middle">Checkout caller</text><rect x="445" y="170" width="250" height="48" rx="8"/><text x="570.0" y="200" text-anchor="middle">placeOrder(order)</text><rect x="425" y="280" width="300" height="48" rx="8"/><text x="575.0" y="310" text-anchor="middle">Validate → Price → Save</text><path d="M570 108 V165" marker-end="url(#arrow)"/><text x="580" y="140">1</text><path d="M570 218 V275" marker-end="url(#arrow)"/><text x="580" y="253">Internal</text><text x="575" y="380" text-anchor="middle">Order module</text></svg></div><p class="small scroll-hint">Scroll to see the full diagram →</p></section><section class="panel supporting"><h2>What changes</h2><p>The checkout caller uses one interface. Validation, pricing, and saving remain ordered internal responsibilities.</p><p>Schematic; not to scale. This does not claim fewer database or network round trips.</p><h2>How to check it works</h2><p>An invalid order is rejected without saving. A valid order returns its saved identifier through placeOrder.</p></section></main></body></html>

@@ -1,11 +1,6 @@
 <!doctype html>
-<html lang="en"><head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
-    <title>Where review happens</title>
-
-  <style>/* Pico CSS v2.1.1 — https://github.com/picocss/pico
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'"><title>How a draft gets published</title><style>/* Pico CSS v2.1.1 — https://github.com/picocss/pico
 MIT License
 
 Copyright (c) 2019-2024 Pico
@@ -44,35 +39,23 @@ body{background:var(--page);color:var(--ink)} main{max-width:1200px;margin:auto;
 .cards>.card .badge{background:#17665b;color:#fff}.cards>.card:nth-child(2) .badge{background:#66509d;color:#fff}
 @media(prefers-color-scheme:dark){.cards>.card,.split>.panel{border-color:#62b9a8;background:var(--panel)}.cards>.card:nth-child(2),.split>.panel:nth-child(2){border-color:#ad94e2;background:var(--panel)}.cards>.card .badge{background:#a3e0cf;color:#123c35}.cards>.card:nth-child(2) .badge{background:#d5c3fc;color:#302048}}
 </style></head>
-  <body>
-    <main>
-      <header><p class="eyebrow">Example · Proposed</p>
-
-        <h1>Where review happens</h1>
-
-
-      </header>
-      <div id="decisions">
-        <section>
-
-          <div class="cards">
-            <div class="card"><span class="card-title">Separate
-                review step</span><span class="badge">Recommended</span>
-              <span class="mockup" aria-label="Separate review preview: draft, review, and publish occupy distinct steps"><span class="mock-nav">Draft → Review → Publish</span><span class="mock-content"><strong>Step 2 · Review draft</strong><span class="mock-row">Title: Welcome</span><span class="mock-row">Audience: Team</span><span class="mock-button">Continue to publish →</span></span></span>
-              <span class="consequence">Review is a clear step. To edit, go back to the draft.</span></div>
-            <div class="card"><span class="card-title">Inline
-                review</span>
-              <span class="mockup" aria-label="Inline review preview: draft and review share one page"><span class="mock-nav">Draft and review</span><span class="mock-body"><span class="mock-content"><strong>Draft</strong><span class="mock-row">Welcome</span></span><span class="mock-content"><strong>Preview</strong><span class="mock-row">Welcome</span></span></span><span class="mock-nav">Publish when ready →</span></span>
-              <span class="consequence">See the preview while editing. Review is easier to skip.</span></div>
-          </div>
-        </section>
-
-      </div>
-
-    </main>
+<body><main><header><p class="eyebrow">Example · Proposed</p><h1>How a draft gets published</h1><p>A reviewer must approve the draft first.</p>
+</header>
+<div id="decisions">
+<section class="panel"><div style="overflow-x:auto" tabindex="0" role="region" aria-label="Review state diagram; scroll horizontally on small screens"><svg style="min-width:560px;max-width:720px" class="diagram" viewBox="0 0 600 260" role="img" aria-labelledby="state-title"><title id="state-title">Draft goes to Review on submit. Review goes to Published on approval, or back to Draft when changes are requested.</title>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z"></path></marker></defs>
+<rect data-node="Draft" x="10" y="50" width="140" height="60" rx="8"></rect><text x="80" y="85" text-anchor="middle">Draft</text>
+<rect data-node="Review" x="230" y="50" width="140" height="60" rx="8"></rect><text x="300" y="85" text-anchor="middle">Review</text>
+<rect data-node="Published" x="450" y="50" width="140" height="60" rx="8"></rect><text x="520" y="85" text-anchor="middle">Published</text>
+<path d="M150 80 H225" marker-end="url(#arrow)"></path><text x="190" y="40" text-anchor="middle">Submit</text>
+<path d="M370 80 H445" marker-end="url(#arrow)"></path><text x="410" y="40" text-anchor="middle">Approve</text>
+<path d="M300 110 V190 H80 V115" marker-end="url(#arrow)"></path><text x="190" y="220" text-anchor="middle">Request edits</text></svg></div><p class="small scroll-hint">Scroll to see the full flow →</p>
 
 
 
+</section>
+
+<section class="panel supporting"><h2>Rules</h2><ul><li>A draft cannot be published without approval.</li><li>If the reviewer requests edits, the author can edit and send it for review again.</li><li>Changes to published posts are not covered here.</li></ul></section></div></main>
 
 
 </body></html>

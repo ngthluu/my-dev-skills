@@ -1,73 +1,81 @@
-# Visual decision workspace
+# Visual information workspace
 
-Use a browser artifact to make a decision easier to judge, not to decorate the brainstorm. It should let a human grasp relationships faster than rereading the conversation while leaving chat as the place where answers are given.
+Create a readable browser reference that lets a human understand the proposal, relationships, and tradeoffs. The page displays information; it does not collect answers. Keep conversation and confirmed decisions in chat and the eventual Markdown spec.
+
+## Keep only useful information
+
+Lead with a specific title such as “Review before publishing,” not “Review the proposed decisions.” Add a subtitle only if it adds a fact. Use simple, direct English: “Waiting for a reviewer can delay publishing,” not “Reviewer availability may delay publication.”
+
+Keep content that explains behavior, a difference, a decision, or a material risk. Delete repeated headings, option labels that repeat card titles, diagram captions that repeat every arrow, generic benefits, workflow instructions, and boilerplate footers. Do not move filler into an expandable section; remove it.
+
+Show a short status such as “Proposed” when needed. Label synthetic samples “Example,” but remove that label for a real proposal. Show dates only when freshness matters or the user requested a durable companion. Keep internal IDs in HTML anchors or the spec; show IDs only when needed to distinguish or reference items.
+
+Let the diagram explain the flow. Keep an accessible title or text equivalent for screen readers; avoid duplicating the same explanation visually. Show scroll guidance only where scrolling is needed. Use short labels with familiar verbs. Put supporting checks in “How to check it works,” not “Acceptance criteria and test seams.”
+
+For final review, prioritize the model, proposed rules, and any real changes, risks, or open questions. Omit sections that have nothing useful to add. Never invent a previous review, risk, or open question just to fill a template. Keep decision status accurate and do not hide important uncertainty to make the page shorter.
+
+Before presenting, read the visible text once: can each line be removed without losing a fact needed to understand or decide? If yes, remove it. Then check that the remaining English is clear to someone who has not read the conversation.
 
 ## Choose the smallest useful visual
 
-Match the representation to the uncertainty:
+Choose per question: would seeing the relationship make the decision easier? Match fidelity to the question: simple boxes for responsibilities, wireframes for layout, polished samples only for appearance decisions.
 
-- Use a flow or sequence for ordered interactions and handoffs.
-- Use a state diagram plus a state panel for legal transitions and failure paths.
-- Use a dependency graph for branching or many-to-many relationships.
-- Use a comparison table or side-by-side cards for two to four alternatives.
-- Use low-fidelity wireframes for hierarchy, layout, navigation, or interaction questions.
-- Use a chart only when real quantities, ranges, or trends affect the decision. Do not chart categorical prose.
-- Use an interactive demo only when clicking through behavior will answer a named design question that static views cannot.
+| Question | Representation | Starting point |
+| --- | --- | --- |
+| What changes? | Before/after using the same labels and scale | `before-after.html` |
+| Who acts, in what order? | Swimlanes or sequence diagram, with labeled exchanges | `handoff-flow.html` |
+| What connects to or depends on what? | System or dependency map with explicit boundaries | `system-map.html` |
+| What is settled, open, or blocked? | Decision tree with prerequisite arrows and text statuses | `decision-tree.html` |
+| Which transitions are legal? | State diagram with triggers and failure/recovery paths | `state-explorer.html`; `failure-recovery.html` example |
+| Which layout works better? | Side-by-side mockups | `decision-workspace.html` |
+| Where do responsibilities move? | Module boundaries, call graph, or layered cross-section | `architecture-before-after.html` example |
+| What concepts relate, and how many? | Entity relationship diagram with cardinalities | Adapt `system-map.html` |
+| What does a person experience over time? | Journey or storyboard | Adapt `handoff-flow.html` |
+| What ships first, and how can it roll back? | Rollout timeline with prerequisites and rollback points | Adapt `handoff-flow.html` |
+| Which scenarios cover the requirements? | Coverage matrix | Prefer a Markdown table in chat |
+| How much, how often, or how long? | Chart with units and sourced quantities | Create only when actual data exists |
+| What needs final review? | Relevant model plus decisions, changes, and risks | `final-review.html` |
 
-Combine representations only when each answers a different open question. Prefer a compact Markdown table in chat when it communicates the issue equally well.
+These are starting points, not a closed menu. Before/after is a comparison format that can contain any suitable diagram; final review is a page purpose that can combine them. Adapt or combine patterns when that explains the decision better. Keep verbal tradeoffs in chat when a compact table is sufficient. Label qualitative sizes “Schematic; not to scale” rather than implying measurements.
 
-## Create and open the artifact
+Use roughly 5–9 primary nodes as a starting heuristic. Split crowded models into overview and detail instead of shrinking labels. Arrows, lanes, and containment should express relationships; paragraphs inside boxes are still prose. Prefer a compact table in chat when it communicates equally well.
 
-Write a single HTML file to the operating system's temporary directory so ordinary brainstorm work does not dirty the repository. Use a fresh, descriptive filename such as `brainstorm-<slug>-<timestamp>.html`. Open it with the platform's normal command (`open`, `xdg-open`, or `start`) and report its absolute path. If opening is unavailable, report the path and continue discovery in chat.
+## Choose a packaged starting point
 
-Make it work by opening the file directly. Prefer semantic HTML, inline CSS, small inline JavaScript, and inline SVG. Do not load remote scripts, fonts, analytics, CDN assets, or browser-event collection: the page may contain private product information, and it should remain usable offline. If an existing local tool can generate a necessary diagram without adding project dependencies, using its static SVG output is fine.
+| Subject | Standalone template |
+| --- | --- |
+| Current and proposed behavior | [before-after.html](../assets/before-after.html) |
+| Actors, exchanges, and retries | [handoff-flow.html](../assets/handoff-flow.html) |
+| Components and boundaries | [system-map.html](../assets/system-map.html) |
+| Decision prerequisites and status | [decision-tree.html](../assets/decision-tree.html) |
+| States and transitions | [state-explorer.html](../assets/state-explorer.html) — static lifecycle reference |
+| Decisions, changes, and risks | [final-review.html](../assets/final-review.html) |
+| UI layout alternatives | [decision-workspace.html](../assets/decision-workspace.html) |
 
-Do not add frameworks, a server, a build step, package dependencies, or production routes merely to render the workspace. Do not include secrets, credentials, private customer data, or unnecessary source content.
+[layout-comparison.html](../examples/layout-comparison.html) and [review-flow.html](../examples/review-flow.html) provide additional layout illustrations. [architecture-before-after.html](../examples/architecture-before-after.html) shows responsibilities moving behind one interface; [failure-recovery.html](../examples/failure-recovery.html) shows retry and cancellation states. All files contain synthetic examples to replace, not default requirements.
 
-## Start from the packaged template
+Copy the appropriate template to a fresh descriptive HTML filename in the OS temporary directory. Replace the example content with the current proposal; remove sections that are not needed. Escape user-supplied text as HTML. Open the file with `open`, `xdg-open`, or `start` and report its absolute path. If opening is unavailable, provide the path.
 
-Copy [assets/decision-workspace.html](../assets/decision-workspace.html) to a fresh file in the OS temporary directory. Replace its title, outcome, updated time, question, option IDs, mockups, consequences, and recommendation with the current decision. Keep all CSS, JavaScript, and any images inline; the copied file must work after the installed skill folder is removed. Escape any user-provided text as HTML instead of inserting it as executable markup or script.
+## Presentation and styling
 
-The template supplies a focused screen, system light/dark theme, native keyboard radio selection, visible focus, responsive cards, mockup components, a readable answer summary, clipboard fallback, and reset. Each radio group uses the stable question ID as `name` and a unique option ID such as `Q1-A` as `value`. Keep its accessible labels and native controls when adapting it. Test keyboard selection, narrow screens, both themes, reset, and unavailable clipboard access after material changes.
+The templates embed **Pico CSS v2.1.1** plus a small custom layout layer. Preserve the embedded MIT license. Keep the CSS inline when copying so the artifact works independently of the installed skill. No CDN, remote fonts, scripts, analytics, server, build step, or added project dependencies are needed.
 
-See [layout-comparison.html](../examples/layout-comparison.html) for navigation alternatives and [review-flow.html](../examples/review-flow.html) for distinct review arrangements. These are fully standalone examples, not files a generated workspace loads. Their mock controls are static illustrations; add real prototype controls only when behavior is the question.
+Use a compact header and clear visual hierarchy. On wider screens, place a diagram beside its context or risk summary. Stack sections on phones. Show all useful content directly. Do not use accordions, `details`/`summary`, or show/hide toggles. Remove unnecessary detail rather than hiding it. Keep material risks, unanswered questions, and deferred scope visible.
 
-Normally compare 2–4 meaningful options. Indicate the recommendation in text and explain each consequence. When comparing layout or behavior, alternatives must differ structurally. Scale fidelity to the current question; ordinary scope, requirements, and verbal tradeoffs remain in chat.
+Pages are display-only: do not add reply panels, copy buttons, radio choices, checkboxes, answer summaries, forms, or action controls. Show alternatives and recommendations as informational content. Express state behavior with labeled transitions and static scenario descriptions. Navigation links are appropriate reading aids. Use neutral panel backgrounds for comparison cards, with distinct colored borders in both themes. Keep titles and recommendation labels so meaning never depends on color alone. A separate interactive prototype is only appropriate when the user explicitly requests one.
 
-## Make decisions traceable
+Use stable IDs shared with chat and the eventual spec: `Q` for questions, `D` for decisions, `A` for assumptions, `R` for risks, and `AC` for acceptance criteria. Distinguish proposed from confirmed decisions in text; displaying a decision never confirms it.
 
-Start with a compact header showing the subject, intended outcome, last-updated time, and that the artifact is a temporary decision aid. Use stable identifiers shared with chat and the eventual spec:
+For final review, show the proposed model, changes since the previous review, decisions in scope, material risks, and deferrals. Do not turn the page into an approval form.
 
-- `Q<n>` for open questions;
-- `D<n>` for settled decisions;
-- `A<n>` for assumptions;
-- `R<n>` for risks;
-- `AC<n>` for acceptance criteria.
+## Verify readability
 
-When possible, show:
+Give diagrams accessible titles or text equivalents. Keep labels readable with stacked panels or a bounded, keyboard-focusable scrolling diagram and a nearby explanation. Use text as well as color to convey status.
 
-1. the current and desired states;
-2. scope and explicit non-goals;
-3. the decision tree, distinguishing settled, open, assumed, contradictory, and deferred nodes;
-4. the visual needed for the current questions;
-5. alternatives with consequences and the recommended option clearly identified;
-6. acceptance criteria paired with public test seams;
-7. a short `Reply in chat` panel listing the IDs awaiting an answer.
-
-Show only context relevant to the focused question; the list above is a menu, not a requirement to crowd every screen. Keep prose sparse. The visual should carry the relationship; labels and captions should explain how to read it. Use accessible contrast, responsive layout, readable type, keyboard-operable controls, and text labels in addition to color.
-
-## Interactive decision aids
-
-An interactive aid is still part of discovery, not production implementation. State the exact question it is testing in the page. Keep all state in memory, use representative synthetic data, expose the current relevant state after every action, and make reset easy.
-
-For UI alternatives, make variants structurally different rather than changing only color or copy. Let the user switch between them in one page and label each variant with its decision ID. For logic or state questions, provide both free-play actions and a few guided scenarios covering the happy path, an important edge case, and an invalid action.
-
-Do not connect the aid to production services or real mutations. Do not treat prototype code as approved implementation. The answer summary must remain readable and selectable when clipboard access fails under `file://`. Browser selections are advisory and never submit, save, or settle decisions; the user supplies the option IDs in chat. Record only the conclusions the user validates in chat.
+When browser tooling is available, inspect desktop and narrow layouts in both themes. Check clipping, overlaps, connector routing, keyboard access to navigation, and absence of external requests. Verify that accessible label references and arrow markers resolve. Read every connector: confirm its direction, endpoints, and label agree with the scenario. Check failures, retries, boundary ownership, and decision prerequisites against the model; rendering checks alone cannot establish correctness. For decision trees, distinguish open decisions from blocked decisions and explicit deferrals in text. Displaying “settled” requires an actual confirmed decision; synthetic examples must remain labeled “Example.” If browser inspection is unavailable, state that limitation.
 
 ## Update and close
 
-Regenerate or revise the workspace when an answer materially changes its model, not after every message. Refresh it before asking for final confirmation so it reflects the proposed shared understanding.
+Refresh the workspace when the decision model changes materially and before final confirmation. Keep secrets, private customer data, and unnecessary source content out of the artifact.
 
-Chat remains authoritative during discovery, and the final Markdown spec is the durable source of truth. Translate every validated visual conclusion into explicit requirements, flows, decisions, edge cases, or acceptance criteria in the spec. The implementation session must not require the temporary HTML.
-
-If the user requests a lasting browser view, write a generated HTML companion beside the completed spec. Label it as generated, include the canonical spec path and generation time, and avoid information that is absent from or contradicts the spec.
+Chat remains authoritative during discovery. Capture every confirmed visual conclusion in the final Markdown spec; implementation must not depend on temporary HTML. If the user requests a durable browser companion, save generated HTML beside the spec, include its canonical path and generation time, and keep the companion consistent with it.

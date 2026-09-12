@@ -1,11 +1,6 @@
 <!doctype html>
-<html lang="en"><head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
-    <title>Where review happens</title>
-
-  <style>/* Pico CSS v2.1.1 — https://github.com/picocss/pico
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'"><title>Which publishing decision comes next?</title><style>/* Pico CSS v2.1.1 — https://github.com/picocss/pico
 MIT License
 
 Copyright (c) 2019-2024 Pico
@@ -43,36 +38,18 @@ body{background:var(--page);color:var(--ink)} main{max-width:1200px;margin:auto;
 .cards>.card:nth-child(2),.split>.panel:nth-child(2){border-color:#7660b5;background:var(--panel)}
 .cards>.card .badge{background:#17665b;color:#fff}.cards>.card:nth-child(2) .badge{background:#66509d;color:#fff}
 @media(prefers-color-scheme:dark){.cards>.card,.split>.panel{border-color:#62b9a8;background:var(--panel)}.cards>.card:nth-child(2),.split>.panel:nth-child(2){border-color:#ad94e2;background:var(--panel)}.cards>.card .badge{background:#a3e0cf;color:#123c35}.cards>.card:nth-child(2) .badge{background:#d5c3fc;color:#302048}}
+</style><style>
+.diagram{width:100%;max-width:none;min-width:800px;height:auto}.diagram text{font-size:16px}.diagram .label{font-size:14px;fill:var(--muted)}.diagram .heading{font-weight:700}.diagram .boundary{fill:none;stroke:var(--muted);stroke-dasharray:8 5}.diagram .lane{stroke:var(--line);stroke-width:1;stroke-dasharray:5 5}.diagram .retry{stroke-dasharray:6 4}.diagram .status{font-size:13px;font-weight:700;letter-spacing:.06em}.diagram .open{stroke:var(--accent);stroke-width:3}.diagram .blocked{stroke:var(--muted);stroke-dasharray:7 4}.diagram .deferred{fill:var(--panel);stroke:var(--muted);stroke-dasharray:2 4}.diagram-scroll{overflow-x:auto;border-radius:6px}.scroll-hint{display:none;margin:12px 0 0}@media(max-width:901px){.scroll-hint{display:block}}.supporting{margin-top:20px}h1{color:var(--ink)}
 </style></head>
-  <body>
-    <main>
-      <header><p class="eyebrow">Example · Proposed</p>
-
-        <h1>Where review happens</h1>
-
-
-      </header>
-      <div id="decisions">
-        <section>
-
-          <div class="cards">
-            <div class="card"><span class="card-title">Separate
-                review step</span><span class="badge">Recommended</span>
-              <span class="mockup" aria-label="Separate review preview: draft, review, and publish occupy distinct steps"><span class="mock-nav">Draft → Review → Publish</span><span class="mock-content"><strong>Step 2 · Review draft</strong><span class="mock-row">Title: Welcome</span><span class="mock-row">Audience: Team</span><span class="mock-button">Continue to publish →</span></span></span>
-              <span class="consequence">Review is a clear step. To edit, go back to the draft.</span></div>
-            <div class="card"><span class="card-title">Inline
-                review</span>
-              <span class="mockup" aria-label="Inline review preview: draft and review share one page"><span class="mock-nav">Draft and review</span><span class="mock-body"><span class="mock-content"><strong>Draft</strong><span class="mock-row">Welcome</span></span><span class="mock-content"><strong>Preview</strong><span class="mock-row">Welcome</span></span></span><span class="mock-nav">Publish when ready →</span></span>
-              <span class="consequence">See the preview while editing. Review is easier to skip.</span></div>
-          </div>
-        </section>
-
-      </div>
-
-    </main>
-
-
-
-
-
-</body></html>
+<body><main><header><p class="eyebrow">Example · Proposed</p><h1>Which publishing decision comes next?</h1><p>A prerequisite tree separates decisions ready for discussion from those waiting on another answer or intentionally postponed.</p></header>
+<section class="panel"><div class="diagram-scroll" tabindex="0" role="region" aria-label="Which publishing decision comes next?; scroll horizontally on small screens"><svg class="diagram" viewBox="0 0 920 560" role="img" aria-labelledby="decision-title decision-desc"><title id="decision-title">Publishing decisions and their prerequisites</title><desc id="decision-desc">The settled requirement for reviewer approval unlocks the open decision about who retries delivery. Retry limits are blocked until retry ownership is settled. A separate scheduling decision depends on approval policy but is deferred beyond the first release. Arrows point from prerequisite to dependent decision.</desc><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z"></path></marker></defs>
+<rect x="270" y="20" width="380" height="100" rx="8"/><text class="status" x="290" y="49">SETTLED · D1</text><text class="heading" x="290" y="77">Reviewer approval is required</text><text class="label" x="290" y="101">Accepted constraint for this example</text>
+<rect class="open" x="35" y="235" width="380" height="110" rx="8"/><text class="status" x="55" y="264">OPEN · D2</text><text class="heading" x="55" y="293">Who retries failed delivery?</text><text class="label" x="55" y="321">Reviewer or publishing service</text>
+<rect class="deferred" x="505" y="235" width="380" height="110" rx="8"/><text class="status" x="525" y="264">DEFERRED · D4</text><text class="heading" x="525" y="293">When may posts be scheduled?</text><text class="label" x="525" y="321">Revisit after the first release</text>
+<rect class="blocked" x="35" y="435" width="380" height="105" rx="8"/><text class="status" x="55" y="464">BLOCKED · D3</text><text class="heading" x="55" y="493">What are the retry limits?</text><text class="label" x="55" y="520">Needs D2: retry ownership</text>
+<path d="M365 120 V177 H225 V235" marker-end="url(#arrow)"/><text class="label" x="205" y="172" text-anchor="end">D1 prerequisite</text>
+<path d="M555 120 V177 H695 V235" marker-end="url(#arrow)"/><text class="label" x="715" y="172">D1 prerequisite</text>
+<path d="M225 345 V435" marker-end="url(#arrow)"/><text class="label" x="245" y="398">D2 must be settled first</text>
+</svg></div><p class="small scroll-hint">On narrow screens, focus the diagram and use the arrow keys, or scroll horizontally.</p></section>
+<section class="panel supporting"><h2>Reading this diagram</h2><ul><li>Arrows point from prerequisite to dependent decision.</li><li>D2 is ready to discuss. D3 remains blocked until D2 is settled. D4 stays deferred beyond the first release even though its prerequisite is settled.</li></ul></section>
+</main></body></html>
