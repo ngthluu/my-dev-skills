@@ -48,7 +48,7 @@ Installer or network errors must be resolved and the requested command retried; 
 Use the brainstorm skill to design a searchable activity log for this project.
 ```
 
-The agent investigates the project and asks focused questions in simple English, usually one at a time. It keeps useful decisions and tradeoffs visible without repeating background. When seeing relationships helps, it creates a temporary offline HTML reference styled with embedded Pico CSS: before/after diagrams, static lifecycle views, UI comparisons, or a final review with explicit decision scope. All useful detail stays visible, and comparison cards have distinct colors and borders. Pages display information only; discussion and confirmation remain in chat. After your final confirmation, it writes the canonical spec to `docs/specs/yyyy-mm-dd-<slug>.md`, including acceptance criteria and test seams.
+The agent investigates the project and explores requirements in decision rounds. When seeing relationships helps, it creates a temporary offline HTML reference styled with embedded Pico CSS: before/after diagrams, static lifecycle views, UI comparisons, or a final review with explicit decision scope. All useful detail stays visible, and comparison cards have distinct colors and borders. Pages display information only; discussion and confirmation remain in chat. After your final confirmation, it writes the canonical spec to `docs/specs/yyyy-mm-dd-<slug>.md`, including acceptance criteria and test seams.
 
 ### Implement the spec
 
