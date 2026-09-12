@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'"><title>Move review before publishing</title><style>/* Pico CSS v2.1.1 — https://github.com/picocss/pico
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'"><title>Where does publishing responsibility live?</title><style>/* Pico CSS v2.1.1 — https://github.com/picocss/pico
 MIT License
 
 Copyright (c) 2019-2024 Pico
@@ -38,16 +38,22 @@ body{background:var(--page);color:var(--ink)} main{max-width:1200px;margin:auto;
 .cards>.card:nth-child(2),.split>.panel:nth-child(2){border-color:#7660b5;background:#f5f0fc}
 .cards>.card .badge{background:#17665b;color:#fff}.cards>.card:nth-child(2) .badge{background:#66509d;color:#fff}
 @media(prefers-color-scheme:dark){.cards>.card,.split>.panel{border-color:#62b9a8;background:#172f30}.cards>.card:nth-child(2),.split>.panel:nth-child(2){border-color:#ad94e2;background:#2b2440}.cards>.card .badge{background:#a3e0cf;color:#123c35}.cards>.card:nth-child(2) .badge{background:#d5c3fc;color:#302048}}
+</style><style>
+.diagram{width:100%;max-width:none;min-width:800px;height:auto}.diagram text{font-size:16px}.diagram .label{font-size:14px;fill:var(--muted)}.diagram .heading{font-weight:700}.diagram .boundary{fill:none;stroke:var(--muted);stroke-dasharray:8 5}.diagram .lane{stroke:var(--line);stroke-width:1;stroke-dasharray:5 5}.diagram .retry{stroke-dasharray:6 4}.diagram .status{font-size:13px;font-weight:700;letter-spacing:.06em}.diagram .open{stroke:var(--accent);stroke-width:3}.diagram .blocked{stroke:var(--muted);stroke-dasharray:7 4}.diagram .deferred{fill:var(--panel);stroke:var(--muted);stroke-dasharray:2 4}.diagram-scroll{overflow-x:auto;border-radius:6px}.scroll-hint{display:none;margin:12px 0 0}@media(max-width:901px){.scroll-hint{display:block}}.supporting{margin-top:20px}h1{color:var(--ink)}
 </style></head>
-<body><main><header><p class="eyebrow">Example · Proposed</p><h1>Move review before publishing</h1><p>Catch mistakes before readers see them.</p>
-</header>
-<div id="decisions">
-<section aria-label="Current and proposed publishing flow">
-<div class="split"><article class="panel"><h2>Now</h2><svg class="diagram" viewBox="0 0 300 320" role="img" aria-labelledby="before-title"><title id="before-title">Draft then Publish then Review then Correct live content</title><defs><marker id="before-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z"></path></marker></defs><rect x="30" y="10" width="240" height="48" rx="8"></rect><text x="150" y="40" text-anchor="middle">Draft</text><path d="M150 58 V85" marker-end="url(#before-arrow)"></path><rect x="30" y="90" width="240" height="48" rx="8"></rect><text x="150" y="120" text-anchor="middle">Publish</text><path d="M150 138 V165" marker-end="url(#before-arrow)"></path><rect x="30" y="170" width="240" height="48" rx="8"></rect><text x="150" y="200" text-anchor="middle">Review</text><path d="M150 218 V245" marker-end="url(#before-arrow)"></path><rect x="30" y="250" width="240" height="48" rx="8"></rect><text x="150" y="280" text-anchor="middle">Fix published post</text></svg><p class="small">Readers may see mistakes.</p></article>
-<article class="panel"><h2>Proposed</h2><svg class="diagram" viewBox="0 0 300 240" role="img" aria-labelledby="after-title"><title id="after-title">Draft then Review then Publish</title><defs><marker id="after-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z"></path></marker></defs><rect x="30" y="10" width="240" height="48" rx="8"></rect><text x="150" y="40" text-anchor="middle">Draft</text><path d="M150 58 V85" marker-end="url(#after-arrow)"></path><rect x="30" y="90" width="240" height="48" rx="8"></rect><text x="150" y="120" text-anchor="middle">Review</text><path d="M150 138 V165" marker-end="url(#after-arrow)"></path><rect x="30" y="170" width="240" height="48" rx="8"></rect><text x="150" y="200" text-anchor="middle">Publish</text></svg><p class="small">Catches mistakes sooner, but adds a wait for review.</p></article></div></section>
-
-<section class="panel supporting"><h2>What this covers</h2><p>New posts only. Existing posts can still be edited.</p></section>
-</div></main>
-
-
-</body></html>
+<body><main><header><p class="eyebrow">Example · Proposed</p><h1>Where does publishing responsibility live?</h1><p>A component map shows ownership and directed data relationships. Positions do not imply execution order.</p></header>
+<section class="panel"><div class="diagram-scroll" tabindex="0" role="region" aria-label="Where does publishing responsibility live?; scroll horizontally on small screens"><svg class="diagram" viewBox="0 0 940 540" role="img" aria-labelledby="system-title system-desc"><title id="system-title">Publishing components and ownership boundaries</title><desc id="system-desc">The editorial application owns the editor UI, publishing API, and content store. The editor UI sends draft and publish requests to the API. The API reads and writes approved revisions in the content store and sends approved content to an external delivery provider. The provider returns a publication status and URL to the API.</desc><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z"></path></marker></defs>
+<rect class="boundary" x="20" y="20" width="555" height="500" rx="12"/><text class="heading" x="45" y="53">Editorial application · owned by our team</text>
+<rect x="180" y="85" width="240" height="65" rx="8"/><text class="heading" x="300" y="124" text-anchor="middle">Editor UI</text>
+<rect x="180" y="255" width="240" height="70" rx="8"/><text class="heading" x="300" y="297" text-anchor="middle">Publishing API</text>
+<rect x="180" y="435" width="240" height="60" rx="8"/><text class="heading" x="300" y="471" text-anchor="middle">Content store</text>
+<path d="M300 150 V255" marker-end="url(#arrow)"/><text x="320" y="197">Draft / publish</text><text x="320" y="218">requests</text>
+<path d="M245 325 V435" marker-end="url(#arrow)"/><text class="label" x="228" y="372" text-anchor="end">Write revisions</text>
+<path d="M355 435 V325" marker-end="url(#arrow)"/><text class="label" x="372" y="399">Read revisions</text>
+<rect class="boundary" x="665" y="165" width="255" height="240" rx="12"/><text class="heading" x="792" y="198" text-anchor="middle">External ownership</text>
+<rect x="685" y="255" width="215" height="70" rx="8"/><text class="heading" x="792" y="297" text-anchor="middle">Delivery provider</text>
+<path d="M420 272 H685" marker-end="url(#arrow)"/><text x="550" y="246" text-anchor="middle">Approved content</text>
+<path d="M685 311 H420" marker-end="url(#arrow)"/><text x="550" y="349" text-anchor="middle">Status + URL</text>
+</svg></div><p class="small scroll-hint">On narrow screens, focus the diagram and use the arrow keys, or scroll horizontally.</p></section>
+<section class="panel supporting"><h2>Reading this diagram</h2><ul><li>Dashed containers mark ownership boundaries; arrows show the direction of requests and data.</li><li>The publishing API checks approval and owns retry identity before sending content across the external boundary.</li><li>Deployment topology, authentication, and transport details are omitted. Component sizes do not represent code size or capacity.</li></ul></section>
+</main></body></html>

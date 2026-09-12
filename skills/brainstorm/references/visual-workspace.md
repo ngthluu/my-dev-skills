@@ -18,14 +18,25 @@ Before presenting, read the visible text once: can each line be removed without 
 
 ## Choose the smallest useful visual
 
-Match the representation to the question:
+Choose per question: would seeing the relationship make the decision easier? Match fidelity to the question: simple boxes for responsibilities, wireframes for layout, polished samples only for appearance decisions.
 
-- Before/after diagrams explain a change with consistent labels and scale.
-- Flows and sequences explain order and handoffs; swimlanes show responsibility.
-- State diagrams show legal transitions and failure paths.
-- Dependency maps show prerequisites and branching relationships.
-- Side-by-side mockups compare layout or navigation alternatives.
-- Tables compare verbal tradeoffs; charts require real quantities.
+| Question | Representation | Starting point |
+| --- | --- | --- |
+| What changes? | Before/after using the same labels and scale | `before-after.html` |
+| Who acts, in what order? | Swimlanes or sequence diagram, with labeled exchanges | `handoff-flow.html` |
+| What connects to or depends on what? | System or dependency map with explicit boundaries | `system-map.html` |
+| What is settled, open, or blocked? | Decision tree with prerequisite arrows and text statuses | `decision-tree.html` |
+| Which transitions are legal? | State diagram with triggers and failure/recovery paths | `state-explorer.html`; `failure-recovery.html` example |
+| Which layout works better? | Side-by-side mockups | `decision-workspace.html` |
+| Where do responsibilities move? | Module boundaries, call graph, or layered cross-section | `architecture-before-after.html` example |
+| What concepts relate, and how many? | Entity relationship diagram with cardinalities | Adapt `system-map.html` |
+| What does a person experience over time? | Journey or storyboard | Adapt `handoff-flow.html` |
+| What ships first, and how can it roll back? | Rollout timeline with prerequisites and rollback points | Adapt `handoff-flow.html` |
+| Which scenarios cover the requirements? | Coverage matrix | Prefer a Markdown table in chat |
+| How much, how often, or how long? | Chart with units and sourced quantities | Create only when actual data exists |
+| What needs final review? | Relevant model plus decisions, changes, and risks | `final-review.html` |
+
+These are starting points, not a closed menu. Before/after is a comparison format that can contain any suitable diagram; final review is a page purpose that can combine them. Adapt or combine patterns when that explains the decision better. Keep verbal tradeoffs in chat when a compact table is sufficient. Label qualitative sizes “Schematic; not to scale” rather than implying measurements.
 
 Use roughly 5–9 primary nodes as a starting heuristic. Split crowded models into overview and detail instead of shrinking labels. Arrows, lanes, and containment should express relationships; paragraphs inside boxes are still prose. Prefer a compact table in chat when it communicates equally well.
 
@@ -34,11 +45,14 @@ Use roughly 5–9 primary nodes as a starting heuristic. Split crowded models in
 | Subject | Standalone template |
 | --- | --- |
 | Current and proposed behavior | [before-after.html](../assets/before-after.html) |
+| Actors, exchanges, and retries | [handoff-flow.html](../assets/handoff-flow.html) |
+| Components and boundaries | [system-map.html](../assets/system-map.html) |
+| Decision prerequisites and status | [decision-tree.html](../assets/decision-tree.html) |
 | States and transitions | [state-explorer.html](../assets/state-explorer.html) — static lifecycle reference |
 | Decisions, changes, and risks | [final-review.html](../assets/final-review.html) |
 | UI layout alternatives | [decision-workspace.html](../assets/decision-workspace.html) |
 
-[layout-comparison.html](../examples/layout-comparison.html) and [review-flow.html](../examples/review-flow.html) provide additional layout illustrations. All files contain synthetic examples to replace, not default requirements.
+[layout-comparison.html](../examples/layout-comparison.html) and [review-flow.html](../examples/review-flow.html) provide additional layout illustrations. [architecture-before-after.html](../examples/architecture-before-after.html) shows responsibilities moving behind one interface; [failure-recovery.html](../examples/failure-recovery.html) shows retry and cancellation states. All files contain synthetic examples to replace, not default requirements.
 
 Copy the appropriate template to a fresh descriptive HTML filename in the OS temporary directory. Replace the example content with the current proposal; remove sections that are not needed. Escape user-supplied text as HTML. Open the file with `open`, `xdg-open`, or `start` and report its absolute path. If opening is unavailable, provide the path.
 
@@ -58,7 +72,7 @@ For final review, show the proposed model, changes since the previous review, de
 
 Give diagrams accessible titles or text equivalents. Keep labels readable with stacked panels or a bounded, keyboard-focusable scrolling diagram and a nearby explanation. Use text as well as color to convey status.
 
-When browser tooling is available, inspect desktop and narrow layouts in both themes. Check clipping, overlaps, connector routing, keyboard access to navigation, and absence of external requests. Verify that diagrams and visible decisions match the underlying model. If browser inspection is unavailable, state that limitation.
+When browser tooling is available, inspect desktop and narrow layouts in both themes. Check clipping, overlaps, connector routing, keyboard access to navigation, and absence of external requests. Verify that accessible label references and arrow markers resolve. Read every connector: confirm its direction, endpoints, and label agree with the scenario. Check failures, retries, boundary ownership, and decision prerequisites against the model; rendering checks alone cannot establish correctness. For decision trees, distinguish open decisions from blocked decisions and explicit deferrals in text. Displaying “settled” requires an actual confirmed decision; synthetic examples must remain labeled “Example.” If browser inspection is unavailable, state that limitation.
 
 ## Update and close
 
