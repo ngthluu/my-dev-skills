@@ -76,6 +76,6 @@ When browser tooling is available, inspect desktop and narrow layouts in both th
 
 ## Update and close
 
-Refresh the workspace when the decision model changes materially and before final confirmation. Keep secrets, private customer data, and unnecessary source content out of the artifact.
+Refresh the workspace only when the decision model changes materially. Do not create or refresh it solely for final confirmation; present the final decision summary and confirmation request in chat. Keep secrets, private customer data, and unnecessary source content out of the artifact.
 
 Chat remains authoritative during discovery. Capture every confirmed visual conclusion in the final Markdown spec; implementation must not depend on temporary HTML. If the user requests a durable browser companion, save generated HTML beside the spec, include its canonical path and generation time, and keep the companion consistent with it.
