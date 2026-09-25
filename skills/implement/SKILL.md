@@ -1,6 +1,9 @@
 ---
 name: implement
 description: Implement a requested change or completed spec with test-driven development, delegated implementation slices, and independent code review.
+disable-model-invocation: true
+metadata:
+  opencode/autoinvoke: "false"
 ---
 
 # Implement

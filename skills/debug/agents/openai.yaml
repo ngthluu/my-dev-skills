@@ -2,3 +2,5 @@ interface:
   display_name: "Debug"
   short_description: "Diagnose bugs and verify evidence-based fixes"
   default_prompt: "Use $debug to reproduce, diagnose, and fix this bug with meaningful verification."
+policy:
+  allow_implicit_invocation: false

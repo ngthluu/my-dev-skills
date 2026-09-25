@@ -28,7 +28,10 @@ test("four agent configurations discover three skills with resolvable packaged r
     const frontmatter = parse(skill.split("---")[1]);
     assert.equal(frontmatter.name, name);
     assert.ok(frontmatter.description.length > 20);
+    assert.equal(frontmatter["disable-model-invocation"], true);
+    assert.equal(frontmatter.metadata["opencode/autoinvoke"], "false");
     const agent = parse(readFileSync(join(dir, "agents/openai.yaml"), "utf8"));
+    assert.equal(agent.policy.allow_implicit_invocation, false);
     assert.ok(agent.interface.default_prompt.includes(`$${name}`));
     assert.ok(
       agent.interface.short_description.length >= 25 &&

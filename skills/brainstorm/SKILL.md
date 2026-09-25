@@ -1,6 +1,9 @@
 ---
 name: brainstorm
 description: Turn an idea, feature, or problem into a self-contained implementation spec through exhaustive, decision-focused questioning. Use before implementation when requirements, constraints, behavior, or test seams still need to be discovered.
+disable-model-invocation: true
+metadata:
+  opencode/autoinvoke: "false"
 ---
 
 # Brainstorm
@@ -9,31 +12,29 @@ Interview the user until a fresh AI session can implement the work without acces
 
 Do not implement the work in this session.
 
-## Explore the decision tree
+## Explore the decision graph
 
-Treat the subject as a tree: each answer may reveal decisions that depend on it. Track settled decisions, unresolved decisions, facts to investigate, assumptions, and contradictions.
+First investigate the workspace, existing artifacts, earlier answers, and authoritative facts. Extract decisions the user has already made; do not ask them to retrieve facts you can find. Before the first question, map the key material decisions and their prerequisites as a dependency graph. Shared prerequisites or answers may serve several branches. Extend or revise the graph when an answer reveals a new branch.
 
-Work in rounds. The frontier is the set of questions whose prerequisites are already settled. In each round:
+Keep a concise decision ledger in chat. Give each node a stable ID, question, prerequisites, impact on the outcome, status (`settled`, `open`, `blocked`, `deferred`, or `contradicted`), answer and source when known, and a reason when reopened or deferred. Show only the relevant frontier when that keeps chat readable, but retain all settled answers throughout the session; carry the ledger into any context-compaction summary before continuing. The ledger is session state, not a temporary file or a second spec.
 
-1. Investigate facts available from the workspace, tools, or authoritative sources. Do not ask the user to retrieve facts you can retrieve.
-2. Ask every independent frontier question together. Number the questions, explain why each decision matters, and give a recommended answer with its tradeoff.
-3. Wait for the user's answers. Recompute the tree from those answers before asking the next round.
+Before **every** question, reconcile the user's whole latest message and new evidence with the entire ledger. One message may settle several nodes, supersede an assumption, or reveal new dependencies. Match answers by meaning, not only wording or ID. Never reask a settled decision because the graph changed. If an answer is partial or ambiguous, ask only for the missing material detail. Reopen a settled node only when later evidence actually contradicts or invalidates it; mark it `contradicted`, state the conflict, then make its smallest resolution question `open` and eligible. Record the resolution and source. Silence is not agreement.
 
-Keep dependent questions for later rounds. Challenge vague goals, implicit behavior, conflicting requirements, failure cases, migration and compatibility expectations, operational constraints, and the boundary of the work. Revisit an answer when new information contradicts it.
+Choose exactly one open node whose prerequisites are settled or safely deferred with an explicit assumption. Resolve prerequisites before dependent nodes; among eligible nodes, choose the one with the greatest impact on the outcome or on unlocking other decisions, then break a genuine tie by stable ID. Briefly explain why it matters and recommend an answer with its tradeoff. Ask that one decision through the host's dedicated question tool when it is exposed and can represent the question. Make exactly one question in that tool call and do not restate it afterward. If the tool is unavailable, restricted, or unsuitable, ask one plain chat question with the same decision and recommendation, only in the final response, never in intermediate commentary. Do not change collaboration mode to obtain a tool. Wait for the answer before choosing another node.
 
-“Endlessly” means until the frontier is empty, not a fixed number of rounds. Do not end merely because enough material exists for a plausible plan. When you believe the tree is exhausted, summarize the decisions and ask the user to confirm that the shared understanding is complete. If they add or change anything, reopen the affected branches and continue.
+Challenge vague goals, implicit behavior, conflicting requirements, failure cases, migration and compatibility expectations, operational constraints, and the boundary of the work. Continue until every material branch needed for implementation in a fresh session is settled or explicitly deferred with a safe assumption. Do not prolong the interview with optional or duplicate questions. Summarize the decisions and write the spec without an extra confirmation question.
 
 ## Use a visual decision workspace when it helps
 
 Keep chat as the input channel, but create a temporary browser-based view when spatial, stateful, comparative, or quantitative relationships are becoming hard to judge in prose. Good signals include flows or dependencies, state transitions, visual comparisons between meaningful alternatives, UI layout decisions, or acceptance criteria whose coverage is difficult to scan.
 
-Read [references/visual-workspace.md](references/visual-workspace.md) before creating one. Use its question-to-representation guide to choose or adapt a packaged template: before/after, handoff flow, system map, decision tree, static lifecycle, final review, or UI comparison. Combine patterns when needed; the templates are not a closed menu. These use embedded Pico CSS and work offline. Lead with the visual relationship and short recommendation; show useful supporting detail directly, without show/hide toggles. Keep the workspace display-only: no reply panels, copy buttons, selection controls, or approval forms. Keep stable IDs for traceability, but show them only when they help the user refer to a specific item. Update the page only when the model changes materially. Do not create or refresh a visual solely for final confirmation; summarize the decision scope, changes, unresolved risks, and deferrals in chat and ask the user to confirm there.
+Read [references/visual-workspace.md](references/visual-workspace.md) before creating one. Use its question-to-representation guide to choose or adapt a packaged template: before/after, handoff flow, system map, dependency graph, static lifecycle, final review, or UI comparison. Combine patterns when needed; the templates are not a closed menu. These use embedded Pico CSS and work offline. Lead with the visual relationship and short recommendation; show useful supporting detail directly, without show/hide toggles. Keep the workspace display-only: no reply panels, copy buttons, selection controls, or approval forms. Keep stable IDs for traceability, but show them only when they help the user refer to a specific item. Update the page only when the model changes materially. A visual does not replace the chat ledger or canonical spec.
 
 Do not create a visual merely because the brainstorm is long. When prose or a compact Markdown table communicates the issue just as well, keep the round in chat.
 
 ## Define observable completion
 
-Before closing the tree, establish:
+Before closing the interview, establish:
 
 - the outcome and who benefits;
 - current behavior and desired behavior;
@@ -48,7 +49,7 @@ A test seam is the public boundary where behavior can be observed without reachi
 
 ## Write the handoff spec
 
-After the user confirms the understanding, create `docs/specs/` if needed and write `docs/specs/yyyy-mm-dd-<slug>.md`. Use the current local date and a short lowercase hyphenated slug. If the target already exists, choose a more specific slug unless the user explicitly asked to update it.
+When all material decisions are settled or safely deferred, create `docs/specs/` if needed and write `docs/specs/yyyy-mm-dd-<slug>.md` without requesting final confirmation. Use the current local date and a short lowercase hyphenated slug. If the target already exists, choose a more specific slug unless the user explicitly asked to update it.
 
 Make the document self-contained and concise. Include:
 

@@ -2,3 +2,5 @@ interface:
   display_name: "Implement"
   short_description: "Implement a spec with TDD and code review"
   default_prompt: "Use $implement to build the work described in this spec."
+policy:
+  allow_implicit_invocation: false
