@@ -7,7 +7,7 @@ import {pathToFileURL} from 'node:url';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const chrome='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const executablePath=process.env.CHROME_PATH || (existsSync(chrome)?chrome:undefined);
-const files=['assets/decision-workspace.html','assets/before-after.html','assets/state-explorer.html','assets/final-review.html','examples/layout-comparison.html','examples/review-flow.html','assets/handoff-flow.html','assets/system-map.html','assets/decision-tree.html','examples/architecture-before-after.html','examples/failure-recovery.html'];
+const files=['assets/decision-workspace.html','assets/before-after.html','assets/state-explorer.html','assets/final-review.html','examples/layout-comparison.html','examples/review-flow.html','assets/handoff-flow.html','assets/system-map.html','assets/decision-graph.html','examples/architecture-before-after.html','examples/failure-recovery.html'];
 test('workspaces display information without answer or action controls, standalone and offline',async()=>{
  const browser=await chromium.launch({executablePath});
  const directory=mkdtempSync(join(tmpdir(),'visual-display-'));

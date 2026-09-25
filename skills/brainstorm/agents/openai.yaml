@@ -2,3 +2,5 @@ interface:
   display_name: "Brainstorm"
   short_description: "Discover requirements with optional visual decision aids"
   default_prompt: "Use $brainstorm to question this idea until it is ready for implementation, using standalone visual comparisons when seeing the choices helps."
+policy:
+  allow_implicit_invocation: false

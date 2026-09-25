@@ -1,6 +1,9 @@
 ---
 name: debug
 description: Investigate and fix reported bugs, failures, unexpected behavior, flaky behavior, and performance regressions using observable evidence and regression checks.
+disable-model-invocation: true
+metadata:
+  opencode/autoinvoke: "false"
 ---
 
 # Debug

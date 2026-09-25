@@ -48,7 +48,7 @@ Installer or network errors must be resolved and the requested command retried; 
 Use the brainstorm skill to design a searchable activity log for this project.
 ```
 
-The agent investigates the project and explores requirements in decision rounds. When seeing relationships helps, it creates a temporary offline HTML reference styled with embedded Pico CSS: before/after diagrams, static lifecycle views, UI comparisons, or a final review with explicit decision scope. All useful detail stays visible, and comparison cards have distinct colors and borders. Pages display information only; discussion and confirmation remain in chat. After your final confirmation, it writes the canonical spec to `docs/specs/yyyy-mm-dd-<slug>.md`, including acceptance criteria and test seams.
+The agent investigates the project, tracks decisions in chat, and asks one material question at a time, using the host's question UI when available. When seeing relationships helps, it creates a temporary offline HTML reference styled with embedded Pico CSS: before/after diagrams, static lifecycle views, UI comparisons, or a final review with explicit decision scope. All useful detail stays visible, and comparison cards have distinct colors and borders. Pages display information only; answers remain in chat. Once material decisions are settled or safely deferred, it writes the canonical spec to `docs/specs/yyyy-mm-dd-<slug>.md`, including acceptance criteria and test seams, without an extra confirmation round.
 
 ### Implement the spec
 
@@ -76,6 +76,8 @@ Debug works in the current session without a brainstorm spec. It reproduces the 
 | OpenCode | Ask to load `brainstorm` with the `skill` tool | Ask to load `implement` with the `skill` tool | Ask to load `debug` with the `skill` tool |
 
 Include your idea, spec path, or bug report after selecting the skill. Shared instructions use `$brainstorm`, `$implement`, and `$debug` as shorthand; use your agent's syntax above.
+
+These skills are configured for explicit invocation in Claude Code, Cursor, Codex, and OpenCode V2. OpenCode V1 does not recognize the OpenCode V2 invocation metadata, so it may still suggest or load a skill automatically.
 
 ## Contributing and releasing
 

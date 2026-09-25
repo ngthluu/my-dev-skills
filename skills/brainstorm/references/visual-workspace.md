@@ -25,7 +25,7 @@ Choose per question: would seeing the relationship make the decision easier? Mat
 | What changes? | Before/after using the same labels and scale | `before-after.html` |
 | Who acts, in what order? | Swimlanes or sequence diagram, with labeled exchanges | `handoff-flow.html` |
 | What connects to or depends on what? | System or dependency map with explicit boundaries | `system-map.html` |
-| What is settled, open, or blocked? | Decision tree with prerequisite arrows and text statuses | `decision-tree.html` |
+| What is settled, open, or blocked? | Dependency graph with prerequisite arrows and text statuses | `decision-graph.html` |
 | Which transitions are legal? | State diagram with triggers and failure/recovery paths | `state-explorer.html`; `failure-recovery.html` example |
 | Which layout works better? | Side-by-side mockups | `decision-workspace.html` |
 | Where do responsibilities move? | Module boundaries, call graph, or layered cross-section | `architecture-before-after.html` example |
@@ -47,7 +47,7 @@ Use roughly 5–9 primary nodes as a starting heuristic. Split crowded models in
 | Current and proposed behavior | [before-after.html](../assets/before-after.html) |
 | Actors, exchanges, and retries | [handoff-flow.html](../assets/handoff-flow.html) |
 | Components and boundaries | [system-map.html](../assets/system-map.html) |
-| Decision prerequisites and status | [decision-tree.html](../assets/decision-tree.html) |
+| Decision prerequisites and status | [decision-graph.html](../assets/decision-graph.html) |
 | States and transitions | [state-explorer.html](../assets/state-explorer.html) — static lifecycle reference |
 | Decisions, changes, and risks | [final-review.html](../assets/final-review.html) |
 | UI layout alternatives | [decision-workspace.html](../assets/decision-workspace.html) |
@@ -66,16 +66,16 @@ Pages are display-only: do not add reply panels, copy buttons, radio choices, ch
 
 Use stable IDs shared with chat and the eventual spec: `Q` for questions, `D` for decisions, `A` for assumptions, `R` for risks, and `AC` for acceptance criteria. Distinguish proposed from confirmed decisions in text; displaying a decision never confirms it.
 
-For final review, show the proposed model, changes since the previous review, decisions in scope, material risks, and deferrals. Do not turn the page into an approval form.
+For final review, show the proposed model, changes since the previous review when relevant, decisions in scope, material risks, and deferrals. Do not turn the page into an approval form.
 
 ## Verify readability
 
 Give diagrams accessible titles or text equivalents. Keep labels readable with stacked panels or a bounded, keyboard-focusable scrolling diagram and a nearby explanation. Use text as well as color to convey status.
 
-When browser tooling is available, inspect desktop and narrow layouts in both themes. Check clipping, overlaps, connector routing, keyboard access to navigation, and absence of external requests. Verify that accessible label references and arrow markers resolve. Read every connector: confirm its direction, endpoints, and label agree with the scenario. Check failures, retries, boundary ownership, and decision prerequisites against the model; rendering checks alone cannot establish correctness. For decision trees, distinguish open decisions from blocked decisions and explicit deferrals in text. Displaying “settled” requires an actual confirmed decision; synthetic examples must remain labeled “Example.” If browser inspection is unavailable, state that limitation.
+When browser tooling is available, inspect desktop and narrow layouts in both themes. Check clipping, overlaps, connector routing, keyboard access to navigation, and absence of external requests. Verify that accessible label references and arrow markers resolve. Read every connector: confirm its direction, endpoints, and label agree with the scenario. Check failures, retries, boundary ownership, and decision prerequisites against the model; rendering checks alone cannot establish correctness. For dependency graphs, distinguish open decisions from blocked decisions and explicit deferrals in text. Displaying “settled” requires an actual confirmed decision; synthetic examples must remain labeled “Example.” If browser inspection is unavailable, state that limitation.
 
 ## Update and close
 
-Refresh the workspace only when the decision model changes materially. Do not create or refresh it solely for final confirmation; present the final decision summary and confirmation request in chat. Keep secrets, private customer data, and unnecessary source content out of the artifact.
+Refresh the workspace only when the decision model changes materially. Present the final decision summary in chat without an extra confirmation request. Keep secrets, private customer data, and unnecessary source content out of the artifact.
 
 Chat remains authoritative during discovery. Capture every confirmed visual conclusion in the final Markdown spec; implementation must not depend on temporary HTML. If the user requests a durable browser companion, save generated HTML beside the spec, include its canonical path and generation time, and keep the companion consistent with it.
