@@ -25,7 +25,7 @@ Choose per question: would seeing the relationship make the decision easier? Mat
 | What changes? | Before/after using the same labels and scale | `before-after.html` |
 | Who acts, in what order? | Swimlanes or sequence diagram, with labeled exchanges | `handoff-flow.html` |
 | What connects to or depends on what? | System or dependency map with explicit boundaries | `system-map.html` |
-| What is settled, open, or blocked? | Dependency graph with prerequisite arrows and text statuses | `decision-tree.html` |
+| What is settled, open, or blocked? | Dependency graph with prerequisite arrows and text statuses | `decision-graph.html` |
 | Which transitions are legal? | State diagram with triggers and failure/recovery paths | `state-explorer.html`; `failure-recovery.html` example |
 | Which layout works better? | Side-by-side mockups | `decision-workspace.html` |
 | Where do responsibilities move? | Module boundaries, call graph, or layered cross-section | `architecture-before-after.html` example |
@@ -47,7 +47,7 @@ Use roughly 5–9 primary nodes as a starting heuristic. Split crowded models in
 | Current and proposed behavior | [before-after.html](../assets/before-after.html) |
 | Actors, exchanges, and retries | [handoff-flow.html](../assets/handoff-flow.html) |
 | Components and boundaries | [system-map.html](../assets/system-map.html) |
-| Decision prerequisites and status | [decision-tree.html](../assets/decision-tree.html) |
+| Decision prerequisites and status | [decision-graph.html](../assets/decision-graph.html) |
 | States and transitions | [state-explorer.html](../assets/state-explorer.html) — static lifecycle reference |
 | Decisions, changes, and risks | [final-review.html](../assets/final-review.html) |
 | UI layout alternatives | [decision-workspace.html](../assets/decision-workspace.html) |
