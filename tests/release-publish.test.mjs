@@ -44,7 +44,7 @@ function fixture(t) {
   writeFileSync(state, "[]");
   writeFileSync(
     join(bin, "gh"),
-    `#!${process.execPath}\nconst fs=require('fs');const cp=require('child_process');const a=process.argv.slice(2);const p=process.env.RELEASE_STATE;let s=JSON.parse(fs.readFileSync(p));if(process.env.EXPECT_REPO){const expected=process.env.EXPECT_REPO;const valid=a[0]==='api'?a.includes('repos/'+expected+'/releases')&&a[a.indexOf('--hostname')+1]==='github.com':a[a.indexOf('--repo')+1]==='github.com/'+expected;if(!valid){console.error('Wrong GitHub repository: ambient default is '+process.env.GH_REPO);process.exit(3);}}if(a[0]==='api'){console.log(JSON.stringify([s]));}else if(a[0]==='release'&&a[1]==='create'){if(process.env.FAIL_PUBLISH)process.exit(1);s.push({tag_name:a[2],draft:false,prerelease:a.includes('--prerelease')});fs.writeFileSync(p,JSON.stringify(s));}else process.exit(2);`,
+    `#!${process.execPath}\nconst fs=require('fs');const cp=require('child_process');const a=process.argv.slice(2);const p=process.env.RELEASE_STATE;let s=JSON.parse(fs.readFileSync(p));if(process.env.EXPECT_REPO){const expected=process.env.EXPECT_REPO;const valid=a[0]==='api'?a.includes('repos/'+expected+'/releases')&&a[a.indexOf('--hostname')+1]==='github.com':a[a.indexOf('--repo')+1]==='github.com/'+expected;if(!valid){console.error('Wrong GitHub repository: ambient default is '+process.env.GH_REPO);process.exit(3);}}if(a[0]==='api'){console.log(JSON.stringify([s.filter(r=>r.tag_name!==process.env.STALE_RELEASE_LIST)]));}else if(a[0]==='release'&&a[1]==='create'){if(process.env.FAIL_PUBLISH)process.exit(1);s.push({tag_name:a[2],draft:false,prerelease:a.includes('--prerelease')});fs.writeFileSync(p,JSON.stringify(s));}else process.exit(2);`,
     { mode: 0o755 },
   );
   const tag = (v, pass = true) => {
@@ -111,6 +111,15 @@ test("latest ignores older releases and prereleases; failed publication and retr
   assert.equal(f.latest(), newest);
   assert.equal(f.run("0.10.0").status, 0);
   assert.equal(JSON.parse(readFileSync(f.state)).length, 3);
+});
+test("newly published release advances latest while the release list is stale", (t) => {
+  const f = fixture(t);
+  f.tag("0.1.3");
+  assert.equal(f.run("0.1.3").status, 0);
+  const newest = f.tag("0.1.4");
+  const result = f.run("0.1.4", { STALE_RELEASE_LIST: "v0.1.4" });
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(f.latest(), newest);
 });
 test("publication followed by rejected latest push is visible and retry recovers without duplicate release", (t) => {
   const f = fixture(t);

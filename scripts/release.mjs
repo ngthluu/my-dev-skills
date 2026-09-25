@@ -115,11 +115,12 @@ function compare(a, b) {
     if (av[i] !== bv[i]) return av[i] > bv[i] ? -1 : 1;
   return 0;
 }
-function updateLatest() {
+function updateLatest(confirmed) {
   for (let attempt = 0; attempt < 8; attempt++) {
     // Read the lease BEFORE releases: any competing advancement invalidates this snapshot.
     const old = git("ls-remote", "origin", "refs/heads/latest").split(/\s/)[0];
-    const best = records().filter(stable).sort(compare)[0];
+    // GitHub's release list may lag behind a successful create response.
+    const best = [...records(), confirmed].filter(stable).sort(compare)[0];
     if (!best) {
       console.log("No published stable release; latest unchanged.");
       return;
@@ -185,7 +186,11 @@ try {
     }
   }
   console.log(`Published release confirmed: ${tag} (${commit})`);
-  updateLatest();
+  updateLatest(existing ?? {
+    tag_name: tag,
+    draft: false,
+    prerelease: value.includes("-"),
+  });
 } catch (error) {
   if (error.stdout) process.stderr.write(error.stdout);
   console.error(error.stderr || error.message);
