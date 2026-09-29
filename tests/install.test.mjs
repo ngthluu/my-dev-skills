@@ -21,7 +21,10 @@ const names = ["brainstorm", "debug", "implement"];
 test("repository-local maintainer skill is hidden from normal installation", () => {
   const localSkill = join(root, ".agents/skills/release-notes/SKILL.md");
   assert.ok(readFileSync(localSkill, "utf8").includes("internal: true"));
-  const listed = run(process.execPath, [cli, "add", root, "--list"], root);
+  const listed = run(process.execPath, [cli, "add", root, "--list"], root, {
+    ...process.env,
+    NO_COLOR: "1",
+  });
   ok(listed);
   assert.match(listed.stdout, /Found 3 skills/);
   assert.doesNotMatch(listed.stdout, /\brelease-notes\b/);
