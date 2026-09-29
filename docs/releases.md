@@ -6,6 +6,8 @@ Use Node 22.20 or newer, Git, and authenticated GitHub CLI (`gh`) for maintainer
 
 Use a single `origin` URL on `github.com`: HTTPS, `git@github.com:owner/repo.git`, or `ssh://git@github.com/owner/repo.git`. Do not configure a separate `remote.origin.pushurl` for release commands. The CLI derives the publication repository from this origin and explicitly targets it for every GitHub operation, regardless of `GH_REPO` or the GitHub CLI default repository. This keeps tag validation, publication, and `latest` reconciliation tied to the same repository. Unsupported origin forms fail before publication.
 
+Before tagging a new release, use the repository-local [release-notes skill](../.agents/skills/release-notes/SKILL.md) to update `CHANGELOG.md` and commit `docs/release-notes/vX.Y.Z.md` with the reviewed GitHub body. The publication command reads the note file from the tagged commit, not the working tree. Historical tags without a note file continue to use GitHub generated notes. Review the publication date immediately before tagging; a later working-tree edit cannot change an immutable tag.
+
 Prepare the first release:
 
 ```sh
@@ -27,7 +29,7 @@ git push origin v0.1.0
 
 These are maintainer actions; implementation of the spec does not authorize running them. Never recreate, force-push, or move an existing version tag. Correct a bad published release with a new version.
 
-The release workflow checks out the tag and runs `node scripts/release.mjs v0.1.0`. This command checks the remote tag's commit against the local immutable tag, validates **committed** manifests, and runs all committed `tests/*.test.mjs` in a detached temporary worktree before publication. When a lockfile exists, it installs that commit's development dependencies with `npm ci --ignore-scripts`. Failed checks prevent publication. The working directory's uncommitted files cannot substitute for release contents. It creates a GitHub Release using the already-pushed tag (`--verify-tag`); it never creates or rewrites remote version tags.
+The release workflow checks out the tag and runs `node scripts/release.mjs v0.1.0`. This command checks the remote tag's commit against the local immutable tag, validates **committed** manifests, and runs all committed `tests/*.test.mjs` in a detached temporary worktree before publication. When a lockfile exists, it installs that commit's development dependencies with `npm ci --ignore-scripts`. Failed checks prevent publication. The working directory's uncommitted files cannot substitute for release contents. It creates a GitHub Release using the already-pushed tag (`--verify-tag`) and the tagged release notes when present; it never creates or rewrites remote version tags.
 
 After successful publication, the command queries every page of GitHub Releases and reconciles `latest`. Updates use an explicit Git compare-and-swap lease. A losing concurrent writer rereads both release records and the branch before retrying, so an older job cannot overwrite a newer published version. Workflow serialization additionally reduces contention; correctness does not depend on job ordering. A retry recognizes an existing published release and does not duplicate it. The repository's `latest` branch is independent of GitHub's UI “Latest” badge.
 

@@ -44,10 +44,10 @@ function fixture(t) {
   writeFileSync(state, "[]");
   writeFileSync(
     join(bin, "gh"),
-    `#!${process.execPath}\nconst fs=require('fs');const cp=require('child_process');const a=process.argv.slice(2);const p=process.env.RELEASE_STATE;let s=JSON.parse(fs.readFileSync(p));if(process.env.EXPECT_REPO){const expected=process.env.EXPECT_REPO;const valid=a[0]==='api'?a.includes('repos/'+expected+'/releases')&&a[a.indexOf('--hostname')+1]==='github.com':a[a.indexOf('--repo')+1]==='github.com/'+expected;if(!valid){console.error('Wrong GitHub repository: ambient default is '+process.env.GH_REPO);process.exit(3);}}if(a[0]==='api'){console.log(JSON.stringify([s.filter(r=>r.tag_name!==process.env.STALE_RELEASE_LIST)]));}else if(a[0]==='release'&&a[1]==='create'){if(process.env.FAIL_PUBLISH)process.exit(1);s.push({tag_name:a[2],draft:false,prerelease:a.includes('--prerelease')});fs.writeFileSync(p,JSON.stringify(s));}else process.exit(2);`,
+    `#!${process.execPath}\nconst fs=require('fs');const cp=require('child_process');const a=process.argv.slice(2);const p=process.env.RELEASE_STATE;let s=JSON.parse(fs.readFileSync(p));if(process.env.EXPECT_REPO){const expected=process.env.EXPECT_REPO;const valid=a[0]==='api'?a.includes('repos/'+expected+'/releases')&&a[a.indexOf('--hostname')+1]==='github.com':a[a.indexOf('--repo')+1]==='github.com/'+expected;if(!valid){console.error('Wrong GitHub repository: ambient default is '+process.env.GH_REPO);process.exit(3);}}if(a[0]==='api'){console.log(JSON.stringify([s.filter(r=>r.tag_name!==process.env.STALE_RELEASE_LIST)]));}else if(a[0]==='release'&&a[1]==='create'){if(process.env.FAIL_PUBLISH)process.exit(1);s.push({tag_name:a[2],draft:false,prerelease:a.includes('--prerelease'),body:a.includes('--notes-file')?fs.readFileSync(a[a.indexOf('--notes-file')+1],'utf8'):null});fs.writeFileSync(p,JSON.stringify(s));}else process.exit(2);`,
     { mode: 0o755 },
   );
-  const tag = (v, pass = true) => {
+  const tag = (v, pass = true, notes) => {
     for (const p of [".claude-plugin", ".codex-plugin", ".cursor-plugin"]) {
       mkdirSync(join(repo, p), { recursive: true });
       writeFileSync(
@@ -60,6 +60,10 @@ function fixture(t) {
       join(repo, "tests", "check.test.mjs"),
       `import assert from 'node:assert/strict'; assert.equal(${pass},true);`,
     );
+    if (notes !== undefined) {
+      mkdirSync(join(repo, "docs", "release-notes"), { recursive: true });
+      writeFileSync(join(repo, "docs", "release-notes", `v${v}.md`), notes);
+    }
     git("add", ".");
     git("commit", "-m", v);
     git("tag", `v${v}`);
@@ -96,6 +100,15 @@ test("release validates committed tag and checks before publication", (t) => {
   f.git("push", "origin", "v0.9.0");
   assert.notEqual(f.run("0.9.0").status, 0);
   assert.equal(JSON.parse(readFileSync(f.state)).length, 1);
+});
+test("publication uses reviewed notes from the tagged commit", (t) => {
+  const f = fixture(t);
+  f.tag("0.3.0", true, "# 0.3.0\n\n## Improvements\n\n- Clearer prompts.\n");
+  writeFileSync(join(f.repo, "docs", "release-notes", "v0.3.0.md"), "# 0.3.0\n\n- Uncommitted change.\n");
+  const result = f.run("0.3.0");
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(JSON.parse(readFileSync(f.state))[0].body, /Clearer prompts/);
+  assert.doesNotMatch(JSON.parse(readFileSync(f.state))[0].body, /Uncommitted/);
 });
 test("latest ignores older releases and prereleases; failed publication and retries are safe", (t) => {
   const f = fixture(t);

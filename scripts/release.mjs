@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdtempSync, readdirSync, rmSync } from "node:fs";
+import { existsSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { tagVersion, validate } from "./version.mjs";
@@ -165,7 +165,19 @@ try {
   if (existing && Boolean(existing.prerelease) !== value.includes("-"))
     throw new Error(`Release ${tag} has inconsistent prerelease metadata`);
   if (!existing) {
+    let notesDirectory;
     try {
+      let notesArgs = ["--generate-notes"];
+      const notesPath = `docs/release-notes/${tag}.md`;
+      if (git("ls-tree", "--name-only", commit, "--", notesPath)) {
+        const body = git("show", `${commit}:${notesPath}`);
+        if (!body.startsWith(`# ${value}\n`) || !body.trim())
+          throw new Error(`Release notes for ${tag} have an invalid heading`);
+        notesDirectory = mkdtempSync(join(tmpdir(), "release-notes-"));
+        const notesFile = join(notesDirectory, "notes.md");
+        writeFileSync(notesFile, body + "\n");
+        notesArgs = ["--notes-file", notesFile];
+      }
       run("gh", [
         "release",
         "create",
@@ -175,7 +187,7 @@ try {
         "--verify-tag",
         "--title",
         tag,
-        "--generate-notes",
+        ...notesArgs,
         "--latest=false",
         ...(value.includes("-") ? ["--prerelease"] : []),
       ]);
@@ -183,6 +195,8 @@ try {
       throw new Error(
         `Publication failed or its result is unknown; latest was not moved. Inspect GitHub Releases and rerun ${tag} to recover. ${error.stderr ?? error.message}`,
       );
+    } finally {
+      if (notesDirectory) rmSync(notesDirectory, { recursive: true, force: true });
     }
   }
   console.log(`Published release confirmed: ${tag} (${commit})`);
