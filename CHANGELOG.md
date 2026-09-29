@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## [0.1.7]
+
 - Hid the repository-local release-notes skill from the public installer skill list.
 
 ## [0.1.6]
