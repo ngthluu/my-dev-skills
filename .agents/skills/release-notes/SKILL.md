@@ -1,6 +1,8 @@
 ---
 name: release-notes
 description: Draft and maintain this repository's changelog and reviewed GitHub release notes from verified changes. Use when preparing or correcting release prose, not for publishing a release.
+metadata:
+  internal: true
 ---
 
 # Release notes

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Hid the repository-local release-notes skill from the public installer skill list.
+
 ## [0.1.6]
 
 - Added a repository-local release-notes skill and a maintained changelog with reviewed notes for historical releases.

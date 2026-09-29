@@ -18,6 +18,14 @@ const root = resolve(import.meta.dirname, "..");
 const cli = join(root, "node_modules/skills/bin/cli.mjs");
 const source = "https://github.com/ngthluu/my-dev-skills";
 const names = ["brainstorm", "debug", "implement"];
+test("repository-local maintainer skill is hidden from normal installation", () => {
+  const localSkill = join(root, ".agents/skills/release-notes/SKILL.md");
+  assert.ok(readFileSync(localSkill, "utf8").includes("internal: true"));
+  const listed = run(process.execPath, [cli, "add", root, "--list"], root);
+  ok(listed);
+  assert.match(listed.stdout, /Found 3 skills/);
+  assert.doesNotMatch(listed.stdout, /\brelease-notes\b/);
+});
 function run(command, args, cwd, env = process.env) {
   const result = spawnSync(command, args, {
     cwd,
