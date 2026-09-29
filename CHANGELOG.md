@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## [0.1.6]
+
 - Added a repository-local release-notes skill and a maintained changelog with reviewed notes for historical releases.
 - Updated release publication to use a reviewed notes file committed with a new tag when one is present.
 - Clarified that anyone may open issues, while pull requests are maintainer-only.
