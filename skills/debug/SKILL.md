@@ -8,47 +8,99 @@ metadata:
 
 # Debug
 
-Take the reported symptom through diagnosis to a verified fix in the current session. No brainstorm spec or separate diagnosis document is required. Keep effort proportional to the uncertainty: an obvious, evidenced bug needs a short loop; an ambiguous failure needs discriminating experiments.
+Take the reported symptom through diagnosis to a verified fix in this session. Match effort to uncertainty. No brainstorm spec or diagnosis document is required.
 
-## Establish a useful signal
+## Working rules
 
-Read relevant repository instructions, context, ADRs, recent changes, and the expected versus actual behavior. Record the starting Git status and relevant diff so unrelated work survives your edits and cleanup.
+- The main agent owns user questions, evidence, cause decisions, integration, and verification.
+- Delegate the stages below when available and permitted. Otherwise work directly. Handle trivial tasks directly.
+- Give agents current evidence, rules, and explicit file or environment ownership. Reuse them with updated context.
+- Parallelize independent inspection. Serialize writes and probes unless files, dependencies, and environments are isolated.
+- Prevent probes from altering each other's signal or competing for measurement resources.
+- Verify returned evidence, actions, and uncertainties. Present useful conclusions, keeping raw reports out of chat.
 
-Exercise the symptom through a meaningful public boundary: a test, CLI command, HTTP request, browser flow, replay, or focused harness. Run it and capture what demonstrates this particular failure. An unrelated setup error or a test that merely runs without crashing does not reproduce the report. Compare a working case when useful. Reduce inputs and setup only while preserving the failing signal; exhaustive minimization is unnecessary when the cause is already evidenced.
+## Step 1: Inspect the report
 
-For flaky behavior, repeat the trigger and report failures out of attempts, keeping relevant timing, random seeds, and environment conditions explicit. Controlled scheduling or stress can strengthen a weak signal. For performance regressions, record comparable repeated baseline measurements before editing, including workload, measurement boundary, and variation; use profiling or scaling comparisons to localize the cost. A single fast run is insufficient evidence.
+- Delegate inspection of repository instructions, relevant code, ADRs, recent changes, and expected versus actual behavior.
+- Research material unknowns using reliable primary sources. Check dates and applicability, retaining links.
+- Capture the starting Git ref, status, and relevant diff. Reconcile findings and preserve unrelated user changes.
 
-If reproduction or access is unavailable, continue useful local investigation and distinguish observed facts from unconfirmed hypotheses. Do not change behavior on speculation. When progress needs external input, state what you tried and request the specific missing access, redacted capture, or reproduction detail. Do not claim the issue is fixed because a different local scenario succeeds.
+## Step 2: Reproduce the signal
 
-## Diagnose before changing behavior
+- Delegate reproduction at a meaningful public boundary: test, CLI, HTTP request, browser flow, replay, or focused harness.
+- Capture the specific failure and a working comparison when useful. Unrelated setup errors or non-crashing runs are not reproduction.
+- Reduce inputs while preserving the signal. Stop minimization once the cause is evidenced.
+- For flakes, repeat triggers and record failures/attempts, timing, seeds, and environment. Use controlled scheduling or stress if useful.
+- For performance, record repeated comparable baselines before edits: workload, measurement boundary, and variation.
+- Profile or compare scaling to locate cost. One fast run is insufficient evidence.
+- If reproduction or access is missing, investigate locally and distinguish facts from hypotheses. Do not patch on speculation.
+- When blocked, report attempts and request specific missing access, reproduction details, or a redacted capture.
+- Success in another scenario does not verify the reported failure.
 
-Trace the failing value through the relevant callers and system boundaries to its origin. Compare working inputs, configuration, and recent changes. Tie the proposed cause to a falsifiable prediction and test that prediction.
+## Step 3: Diagnose the cause
 
-For ambiguous failures, share ranked hypotheses with the evidence for each and a probe that distinguishes them. This is a progress update, not an approval checkpoint. Test one variable at a time; update the ranking from results. Do not invent a quota of hypotheses for an obvious bug.
+- Delegate independent hypotheses and tracing across callers and system boundaries. Compare working inputs, configuration, and changes.
+- Test a falsifiable cause prediction with a distinguishing probe, varying one factor at a time.
+- Reconcile evidence and rank hypotheses after each probe. An obvious bug does not require a hypothesis quota.
+- When uncertain, share this update without turning it into an approval checkpoint:
 
-Prefer targeted inspection, a debugger, or small probes over broad logging. Tag temporary instrumentation with a unique marker and track disposable files for cleanup. Inspect only needed fields in captured material; redact secrets before displaying command output, artifacts, or reports. Keep credentials in the environment rather than command arguments and avoid environment dumps. External mutations and production instrumentation must remain within the user's authorization and environment rules.
+```text
+Evidence: <observed failure and working comparison>
+Hypotheses, ranked: <cause → support or conflict>
+Next probe: <prediction and distinguishing command>
+```
 
-Count failed fix attempts, including relevant attempts reported earlier. After three failures, stop patching and reassess the root-cause model and architecture: shared state, ownership, coupling, and invalid assumptions may explain why local fixes failed. Explain what the failures rule out, gather new discriminating evidence, and only resume fixes on a supported model. Do not turn reassessment into an unapproved redesign.
+- Prefer targeted probes to broad logs. Mark temporary instrumentation uniquely and track disposable files.
+- Inspect only needed fields, redact secrets, and keep credentials in the environment rather than command arguments.
+- Avoid environment dumps. Follow environment authorization rules for external mutations and production instrumentation.
+- After three relevant failed fixes, including prior attempts, stop patching and reassess shared state, ownership, coupling, and assumptions.
+- Explain what failures rule out. Gather new distinguishing evidence before another fix. Do not begin an unapproved redesign.
 
-## Fix, review, verify, and clean up
+## Step 4: Fix the supported cause
 
-Keep initial reproduction and root-cause investigation with the parent agent. Once the cause is supported by evidence, delegate the regression test and fix together as one bounded task when subagents are available and repository policy permits them. Implement small, straightforward fixes directly when handoff overhead outweighs the benefit. Give the implementer the original report, reproduction command and observed failure, root-cause evidence, relevant repository instructions, acceptance criteria, and explicit file ownership. Require regression red/green evidence and verification of the original reproduction. Run mutating subagents sequentially unless their file ownership and dependencies are demonstrably disjoint; parallel work must never edit overlapping files. The parent remains responsible for assessing the evidence, inspecting and integrating the fix, and final verification. If subagents are unavailable or delegation is prohibited, perform the fix directly.
+- Delegate regression and fix together after evidence supports the cause, supplying reproduction, rules, criteria, and file ownership.
+- Write a regression for the actual bug pattern at a meaningful automated seam. Observe failure for the reported reason before the fix.
+- Exercise the interaction for cross-boundary or multi-caller bugs. Make the smallest evidence-supported change.
+- If no meaningful automated seam exists, explain why and use the strongest observable check. Avoid coverage-only tests.
+- Inspect and integrate the result with regression red/green and original reproduction evidence.
 
-When a meaningful automated seam exists, write a regression test that exercises the actual bug pattern and observe it fail for the reported reason before applying the fix. A multi-caller or cross-boundary bug needs a test that reaches that interaction. Then make the smallest evidence-supported change, run the regression test again, rerun the original unminimized scenario, and run relevant neighboring checks. Investigate any failed verification before claiming success.
+## Step 5: Verify the fix
 
-If no meaningful automated seam exists, explain why and use the strongest available observable verification. Do not add a shallow test just to claim coverage. For flaky or performance fixes, repeat comparable measurements after the change and report the bounded evidence; finite successful runs do not prove universal absence of a race.
+- Run the regression green, original unminimized scenario, and relevant neighboring checks. Investigate failures.
+- Delegate checks when useful, specifying the current revision and environment. Inspect evidence before claiming success.
+- Repeat comparable flaky/performance measurements. Report bounded results: finite successful runs cannot prove a race absent.
 
-After making a fix, review the implementation diff on two independent axes:
+## Step 6: Review independently
 
-- **Cause and regression review:** verify that the change addresses the evidenced root cause rather than only the symptom, the regression test exercises the reported bug through the right seam, and the test would fail if the bug or a plausible equivalent mistake were present. Check that the original reproduction and the test support the same conclusion.
-- **Code review:** check the changed code against repository instructions and conventions for concrete correctness, maintainability, security, concurrency, error-handling, compatibility, and unintended behavior changes. Distinguish documented violations from judgment calls and ignore unrelated pre-existing problems.
+- If no behavior changed, skip fix review and report whether the symptom was reproduced, resolved without edits, unconfirmed, or blocked.
+- Give two independent reviewers the report, reproduction, cause evidence, baseline, fix diff, rules, and verification.
+- Use reviewers who did not implement the fix. Run read-only reviews in parallel without further delegation.
+- If delegation is unavailable or prohibited, review each axis yourself and disclose the limitation.
+- **Cause and regression:** check cause evidence, test seam, detection of the bug or a plausible equivalent, and original reproduction.
+- **Code:** check correctness, maintainability, security, concurrency, errors, compatibility, unintended behavior, and repository rules.
+- Distinguish rule violations from judgment calls. Exclude unrelated pre-existing issues.
+- Keep separate verdicts (`Approve`, `Findings`, `Blocked`), unverifiable items, and findings graded critical, important, or minor.
+- Each finding needs file:line, conflicting evidence or rule, impact, and a concrete fix when needed.
 
-Give each reviewer the original report, reproduction command and observed failure, root-cause evidence, baseline and fix diff, relevant repository instructions, regression red/green evidence, and verification evidence available so far. Use separate reviewers who did not implement the changes under review. Reviewers must inspect independently and read-only: they do not edit the work or delegate parts of their review.
+## Step 7: Resolve review findings
 
-When subagents are available and repository policy permits them, run the two reviews in parallel. Otherwise, perform them separately in the main session so one axis does not mask the other. Each reviewer returns its own verdict and findings grouped as critical, important, or minor. Every finding must cite a file and line, the conflicting evidence or rule, why it matters, and a concrete fix when non-obvious. Reviewers list anything they could not verify rather than treating absence of evidence as approval.
+- Verify findings against evidence and code. Fix valid in-scope issues, reusing the original implementer and reviewers.
+- Rerun affected regression and original reproduction. Recheck every open finding and new problems introduced by fixes.
+- Repeat full reviews when cause, behavior, or design changes materially.
+- Continue until both axes approve without material findings or a concrete external blocker prevents completion.
 
-Keep the two reports separate. Verify every finding against the reproduction, evidence, and code; fix every valid in-scope issue and rerun the affected regression and original reproduction. Return valid findings to the original implementer when available; otherwise apply the fixes directly. Reuse the original reviewers for fix rounds when available rather than spawning an agent per finding. For each fix round, re-review every open finding against the fix diff and check that the fix introduced no new material problem. Repeat both full reviews only when fixes materially change the root-cause model, behavior, or design. Stop when both axes approve with no material finding left, or when a concrete external blocker prevents completion. If no behavior change was made, skip review and report the investigation as unconfirmed or blocked instead.
+## Step 8: Clean up and report
 
-Remove your temporary instrumentation and disposable harnesses. Retain a harness only when it has an explicit ongoing purpose, such as a regression or benchmark, and identify that purpose. Inspect the final diff and untracked files against the starting state; preserve unrelated changes and user-owned artifacts.
+- Delegate an audit of temporary instrumentation, disposable harnesses, final diff, and untracked files against the baseline.
+- Remove temporary artifacts while preserving user files. Retain harnesses only for explicit regression or benchmark purposes.
+- Verify cleanup and ensure final checks cover review fixes. Reuse current passing evidence if no relevant change followed it.
+- Report in chat without requiring a commit, publication, or diagnosis document:
 
-Run the final relevant verification after review fixes. Report the symptom, reproduction evidence, root cause, change, both review results and fixes made, verification commands and outcomes, and remaining limits in chat. State blocked or unconfirmed results precisely. Committing, publishing, or creating a diagnosis document is not required by this skill.
+```text
+Symptom and reproduction: <command and observed result>
+Root cause: <evidence, or unconfirmed>
+Change: <fix and regression, or none>
+Reviews: <cause/regression verdict; code verdict; fixes>
+Verification: <commands, outcomes, original scenario>
+Limits or blocker: <remaining uncertainty or required input>
+```

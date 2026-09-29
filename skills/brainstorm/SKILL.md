@@ -8,71 +8,93 @@ metadata:
 
 # Brainstorm
 
-Interview the user until a fresh AI session can implement the work without access to this conversation. The deliverable is a decision record and implementation spec at `docs/specs/yyyy-mm-dd-<slug>.md`.
+Turn the idea into a decision record and self-contained spec at `docs/specs/yyyy-mm-dd-<slug>.md` for a fresh implementation session. Do not implement in this session.
 
-Do not implement the work in this session.
+## Working rules
 
-## Explore the decision graph
+- The main agent owns user questions, decisions, and the ledger. Subagents propose updates with evidence and uncertainties.
+- Delegate the stages below when available and permitted. Otherwise work directly. Handle trivial updates directly.
+- Reuse agents with current context, parallelize independent investigations, and give writers separate files.
+- Verify findings before using them. Present conclusions and conflicts, keeping raw investigation logs out of chat.
 
-First investigate the workspace, existing artifacts, earlier answers, and authoritative facts. Extract decisions the user has already made; do not ask them to retrieve facts you can find. Before the first question, map the key material decisions and their prerequisites as a dependency graph. Shared prerequisites or answers may serve several branches. Extend or revise the graph when an answer reveals a new branch.
+## Step 1: Inspect context
 
-Keep a concise decision ledger in chat. Give each node a stable ID, question, prerequisites, impact on the outcome, status (`settled`, `open`, `blocked`, `deferred`, or `contradicted`), answer and source when known, and a reason when reopened or deferred. Show only the relevant frontier when that keeps chat readable, but retain all settled answers throughout the session; carry the ledger into any context-compaction summary before continuing. The ledger is session state, not a temporary file or a second spec.
+- Delegate inspection of the workspace, repository instructions, existing artifacts, and prior answers.
+- Research material unknowns using reliable primary sources. Check dates and applicability, retain links, and label assumptions.
+- Reconcile findings and extract existing decisions. Find available facts instead of asking the user to retrieve them.
 
-Before **every** question, reconcile the user's whole latest message and new evidence with the entire ledger. One message may settle several nodes, supersede an assumption, or reveal new dependencies. Match answers by meaning, not only wording or ID. Never reask a settled decision because the graph changed. If an answer is partial or ambiguous, ask only for the missing material detail. Reopen a settled node only when later evidence actually contradicts or invalidates it; mark it `contradicted`, state the conflict, then make its smallest resolution question `open` and eligible. Record the resolution and source. Silence is not agreement.
+## Step 2: Map decisions
 
-Choose exactly one open node whose prerequisites are settled or safely deferred with an explicit assumption. Resolve prerequisites before dependent nodes; among eligible nodes, choose the one with the greatest impact on the outcome or on unlocking other decisions, then break a genuine tie by stable ID. Briefly explain why it matters and recommend an answer with its tradeoff. Ask that one decision through the host's dedicated question tool when it is exposed and can represent the question. Make exactly one question in that tool call and do not restate it afterward. If the tool is unavailable, restricted, or unsuitable, ask one plain chat question with the same decision and recommendation, only in the final response, never in intermediate commentary. Do not change collaboration mode to obtain a tool. Wait for the answer before choosing another node.
-
-Challenge vague goals, implicit behavior, conflicting requirements, failure cases, migration and compatibility expectations, operational constraints, and the boundary of the work. Continue until every material branch needed for implementation in a fresh session is settled or explicitly deferred with a safe assumption. Do not prolong the interview with optional or duplicate questions. Summarize the decisions and write the spec without an extra confirmation question.
-
-## Use a visual decision workspace when it helps
-
-Keep chat as the input channel, but create a temporary browser-based view when spatial, stateful, comparative, or quantitative relationships are becoming hard to judge in prose. Good signals include flows or dependencies, state transitions, visual comparisons between meaningful alternatives, UI layout decisions, or acceptance criteria whose coverage is difficult to scan.
-
-Read [references/visual-workspace.md](references/visual-workspace.md) before creating one. Use its question-to-representation guide to choose or adapt a packaged template: before/after, handoff flow, system map, dependency graph, static lifecycle, final review, or UI comparison. Combine patterns when needed; the templates are not a closed menu. These use embedded Pico CSS and work offline. Lead with the visual relationship and short recommendation; show useful supporting detail directly, without show/hide toggles. Keep the workspace display-only: no reply panels, copy buttons, selection controls, or approval forms. Keep stable IDs for traceability, but show them only when they help the user refer to a specific item. Update the page only when the model changes materially. A visual does not replace the chat ledger or canonical spec.
-
-Do not create a visual merely because the brainstorm is long. When prose or a compact Markdown table communicates the issue just as well, keep the round in chat.
-
-## Define observable completion
-
-Before closing the interview, establish:
-
-- the outcome and who benefits;
-- current behavior and desired behavior;
-- scope and explicit non-goals;
-- functional requirements and important failure behavior;
-- constraints, dependencies, compatibility, rollout, and migration needs;
-- acceptance criteria stated as observable outcomes;
-- public test seams for each acceptance criterion, favoring existing interfaces and the highest practical seam;
-- unresolved risks or decisions that may safely be deferred.
-
-A test seam is the public boundary where behavior can be observed without reaching into implementation details. These agreed seams must appear in the spec so `$implement` can use them for TDD.
-
-## Write the handoff spec
-
-When all material decisions are settled or safely deferred, create `docs/specs/` if needed and write `docs/specs/yyyy-mm-dd-<slug>.md` without requesting final confirmation. Use the current local date and a short lowercase hyphenated slug. If the target already exists, choose a more specific slug unless the user explicitly asked to update it.
-
-Make the document self-contained and concise. Include:
-
-1. title, status, date, and source context;
-2. conversation summary and intended outcome;
-3. current state and relevant workspace findings;
-4. requirements and non-goals;
-5. decisions made, including rationale and rejected alternatives that matter;
-6. user-visible flows, edge cases, and failure behavior;
-7. acceptance criteria paired with their agreed test seams;
-8. technical constraints and likely affected areas, without inventing an implementation the user did not approve;
-9. rollout, migration, observability, or compatibility requirements when applicable;
-10. risks, assumptions, and any explicitly deferred questions;
-11. a fresh-session instruction telling the next agent to read the whole spec, inspect the current workspace, and invoke `$implement` with this spec path.
-
-Reference existing artifacts by path instead of copying them. Never copy secrets or sensitive personal data into the spec.
-
-The Markdown spec is canonical. If a visual workspace was used, capture its validated conclusions in the spec rather than making the next session depend on the temporary HTML. Preserve a generated HTML companion beside the spec only when the user asks for a durable or shareable browser view; mark it as generated and link it back to the canonical spec.
-
-After writing, report the exact path and tell the user to start a new session with:
+- Have subagents identify material decisions, dependencies, and shared prerequisites. Split complex independent branches.
+- Integrate findings into a dependency graph before the first question. Revise it as answers reveal branches.
+- Maintain this session ledger with stable IDs and statuses: `settled`, `open`, `blocked`, `deferred`, or `contradicted`.
 
 ```text
-Use $implement with <spec-path>.
+Q1 | Question: <decision> | Prerequisites: <IDs or none> | Impact: <outcome or unlocked decisions> | Status: open
+Answer/source: <answer and evidence> | Reopened/deferred reason: <if applicable>
 ```
 
-The skill cannot clear or reset the current model context itself; the new session is the context boundary.
+- Show relevant entries in chat and preserve the complete ledger in compaction summaries. Do not create a separate ledger file.
+
+## Step 3: Ask one material question
+
+- Select exactly one eligible open node with settled prerequisites or explicit safe deferrals.
+- Prefer outcome impact or unlocking potential. Break a genuine tie by stable ID. Delegate complex option analysis.
+- Explain why the decision matters, recommend an answer, and state its tradeoff. Skip duplicate or optional questions.
+- Use a suitable host question tool with one question, without repeating it in chat.
+- If unavailable, restricted, or unsuitable, ask one plain chat question in the final response, never in commentary.
+- Do not change collaboration mode to access a tool. Wait for the answer, then follow Step 4.
+
+For spatial, stateful, comparative, or quantitative relationships, delegate a browser visual when clearer than prose or a table.
+
+- Have the writer read [references/visual-workspace.md](references/visual-workspace.md). Check its artifact and verification findings.
+- Keep chat as the input channel and ledger authority, the Markdown spec canonical, and the page display-only.
+- Update visuals for material model changes and carry validated conclusions into the spec.
+- Save a linked HTML companion beside the spec only when requested.
+
+## Step 4: Reconcile and repeat
+
+- Reuse one reconciliation subagent for each substantive reply, supplying the whole latest message, new evidence, and complete ledger.
+- Request proposed answer, assumption, dependency, and contradiction updates with evidence. Verify and apply before another question.
+- Match by meaning and settle several decisions when answered together. For partial or ambiguous answers, ask only missing material detail.
+- Never treat silence as agreement. Reopen settled decisions only when evidence contradicts or invalidates them.
+- Mark conflicts `contradicted`, explain them, and ask the smallest resolving question. Record its resolution and source.
+- Never reask solely because the graph changed. Return to Step 3 for remaining material decisions.
+- Before finishing, delegate a gap check: unresolved branches, assumptions, failures, migration, compatibility, and operations.
+- Finish discovery when all material branches are settled or safely deferred with explicit assumptions. Summarize without another confirmation.
+
+## Step 5: Write the spec
+
+- Delegate drafting from the settled ledger and evidence. Pair every observable acceptance criterion with an agreed public test seam.
+- Use the template below, omitting inapplicable conditional details. Prefer existing interfaces and practical test boundaries.
+- Have a separate subagent review against the ledger and evidence. Verify findings and return material decision gaps to Step 3.
+- Create `docs/specs/` if needed. Use the local date and a lowercase hyphenated slug, making it more specific if the path exists.
+- Write without final confirmation. Update an existing spec only when requested. Exclude secrets and sensitive personal data.
+- Reference existing artifacts by path and make the spec sufficient without temporary HTML.
+
+```markdown
+# <title>
+- Status: Ready for implementation
+- Date: <local date>
+- Source: <request and evidence>
+
+## Outcome and current state
+<beneficiary, request summary, current and desired behavior, workspace findings>
+
+## Decisions and requirements
+<decisions, rationale, rejected alternatives, requirements, non-goals, flows, edge cases, failure behavior>
+
+## Acceptance criteria and public test seams
+| Criterion | Observable seam |
+| --- | --- |
+| <outcome> | <public boundary and observation> |
+
+## Constraints and risks
+<constraints, dependencies, affected areas, assumptions, risks, deferred questions>
+<compatibility, rollout, migration, observability when applicable; existing artifact paths>
+Read this whole spec and inspect the current workspace before implementing.
+```
+
+## Step 6: Report the handoff
+
+- Tell the user to start a new session with `Use $implement with <spec-path>.`

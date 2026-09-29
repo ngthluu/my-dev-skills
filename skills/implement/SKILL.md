@@ -8,63 +8,89 @@ metadata:
 
 # Implement
 
-Deliver the user's request completely. Treat the current request and any supplied spec or requirements document as the contract. Preserve unrelated user changes and follow repository instructions such as `AGENTS.md`, `CONTRIBUTING.md`, ADRs, and documented coding standards.
+Deliver the requested change or supplied spec completely. Follow repository instructions and preserve unrelated user changes.
 
-## Establish the contract and baseline
+## Working rules
 
-Read the entire supplied spec or requirements document and every artifact it directly requires. When none was supplied, use the current request as the requirements source. Inspect the relevant code before editing.
+- The main agent owns the contract, user questions, scope, integration, and verification. Subagents must not settle product decisions.
+- Delegate the stages below when available and permitted. Otherwise work directly. Handle trivial work directly.
+- Give agents the contract, relevant rules, baseline, evidence, and explicit file ownership. Reuse them with updated context.
+- Parallelize independent inspection. Serialize writers unless files and dependencies are disjoint.
+- Require concise findings, changed files, commands, outcomes, and uncertainties. Verify results and keep raw reports out of chat.
 
-Establish observable acceptance criteria and public test seams from the requirements source. Resolve missing facts yourself. Ask the user only about an unresolved product decision that would materially change the result. Do not silently expand the scope.
+## Step 1: Establish the contract
 
-Record the starting Git ref, status, and existing diff so implementation changes can be distinguished from pre-existing work. Identify the repository's test, typecheck, lint, build, and formatting commands from its own configuration.
+- Read the entire supplied spec and its required artifacts yourself. Otherwise use the current request as the contract.
+- Identify observable acceptance criteria and public test seams. Ask only about unresolved material product decisions.
+- Delegate inspection of repository rules, relevant code, prior decisions, and verification commands before editing.
+- Resolve material unknowns through inspection and primary-source research. Check dates, retain links, and distinguish assumptions.
+- Reconcile evidence and record the starting Git ref, status, and relevant diff before mutations. Keep the agreed scope.
 
-Break the work into small vertical slices. Each slice should produce one observable behavior at an agreed seam.
+## Step 2: Plan behavior slices
 
-## Implement with TDD
+- Delegate complex boundary, dependency, and risk analysis. Verify the plan before assigning work.
+- Divide work into small vertical slices, each delivering one observable behavior at an agreed public seam.
 
-For each slice, follow a red → green cycle:
+## Step 3: Implement with red and green tests
+
+- Delegate coherent slices with their criterion, public seam, and file ownership. Require independent source inspection.
+- Require this TDD cycle and red/green commands and outcomes. Inspect and integrate each result before dependent work.
 
 1. Write one behavior-focused test through the agreed public seam.
-2. Run that focused test and confirm it fails for the expected missing behavior. A syntax, fixture, or environment failure is not a valid red state.
-3. Write the smallest implementation that makes the test pass. Do not anticipate later slices.
-4. Run the focused test again, then relevant neighboring tests.
-5. Continue with the next behavior. Refactor only while the suite stays green.
+2. Run it and observe failure from missing behavior. Setup, fixture, and syntax errors do not count as red.
+3. Make the smallest implementation that passes, without anticipating later slices.
+4. Run the focused test and neighboring tests green. Refactor while tests stay green.
+5. Repeat for the next behavior instead of writing a batch of tests ahead of implementation.
 
-Tests should survive internal refactoring. Avoid private-method tests, mocks of internal collaborators, tautological expectations, and large batches of tests written ahead of their implementations. Use a known literal, worked example, or the requirements source as the independent source of expected values.
+- Assert outcomes through the real public path using expected values from requirements, known literals, or worked examples.
+- Do not mirror the production algorithm, mock the behavior under test, or weaken a correct test to pass.
+- Avoid private-method tests, internal mocks, tautologies, conditional assertions, and checks that only assert no crash.
+- Add a contrasting or boundary case when one example permits constant output, a hard-coded special case, or ignored input.
+- Repair tests that pass without the behavior. Observe a valid red state before continuing that slice.
 
-A green test is meaningful only when it would detect missing or wrong behavior. Its setup must reach the real public path, its assertions must observe the promised outcome, and its expected values must not be copied from or recomputed with the production algorithm. Do not mock the behavior being implemented, hide assertions behind conditionals, accept merely non-crashing execution, or weaken a correct test to accommodate the implementation. When one example could pass through a constant, hard-coded special case, or ignored input, add the smallest contrasting or boundary example that rules that out. If a test passed before the behavior existed, or would remain green with the relevant production change removed, it is not evidence for the slice; correct it and observe a valid red state before continuing.
+## Step 4: Verify the implementation
 
-When subagents are available and repository policy permits them, delegate each coherent behavior slice with its TDD implementation work. Implement small, straightforward changes directly when handoff overhead outweighs the benefit. Give each implementer the requirements source, one slice, its acceptance criterion and seam, relevant repository instructions, and explicit file ownership. Have the subagent inspect the source itself and return the red and green test evidence. Run mutating subagents sequentially unless their file ownership and dependencies are demonstrably disjoint; parallel work must never edit overlapping files. The parent agent remains responsible for inspecting and integrating every result and for final verification. If subagents are unavailable or delegation is prohibited, perform the same loop directly.
+- Run focused tests and available typechecking during implementation.
+- After integration, run defined formatting, lint, typechecking, the full relevant test suite, and build. Resolve failures.
+- Delegate execution when useful, recording commands, outcomes, and failure evidence for the integrated changes.
 
-Run typechecking and focused tests throughout. Once all slices are green, run formatting or lint checks, typechecking, the full relevant test suite, and the build when the project defines them.
+## Step 5: Review independently
 
-## Review on two independent axes
+- Compare changes with the recorded baseline. Investigate an unexpected empty diff.
+- Give two reviewers the contract, rules, baseline, implementation diff, changed files, and verification evidence.
+- Use reviewers who did not implement the changes. Run read-only reviews in parallel, without further delegation.
+- If delegation is unavailable or prohibited, review the two axes separately yourself and disclose the limitation.
+- **Requirements:** check missing criteria, incorrect behavior, unsupported scope, and evidence at each public test seam.
+- **Code:** check correctness, maintainability, security, concurrency, errors, conventions, and test quality.
+- Check that tests catch plausible violations. Flag mirrored algorithms, internal mocks, bypassed seams, and overfit fixtures.
+- Separate rule violations from judgment calls. Skip issues conclusively enforced by passing tools.
+- Review implementation changes, mentioning relevant pre-existing issues separately. Keep reports and unverifiable items explicit.
 
-Determine the implementation diff from the recorded baseline. If it is empty, investigate before claiming completion.
+```text
+Axis: Requirements | Code
+Verdict: Approve | Findings | Blocked
+Findings:
+- Critical | Important | Minor: file:line — violated requirement/rule; impact; concrete fix
+Could not verify: ...
+```
 
-Give each reviewer the requirements source, baseline and implementation diff, relevant repository instructions, changed-file list, and red/green plus verification evidence available so far. Use separate reviewers who did not implement the changes under review. Reviewers must inspect independently and read-only: they do not edit the work or delegate parts of their review.
+## Step 6: Resolve review findings
 
-When subagents are available and repository policy permits them, launch these two read-only reviewers in parallel so one review does not bias the other:
+- Verify each finding against the contract and code. Fix every valid in-scope issue, reusing the original implementer when available.
+- Rerun affected checks and give original reviewers the fix diff and evidence. Recheck open findings and new problems from fixes.
+- Repeat both full reviews when fixes materially change behavior or design.
+- Continue until both axes approve without material findings or a concrete external blocker prevents completion.
 
-- **Requirements reviewer:** compare the diff and tests with the user request and any supplied spec. Report missing or partial requirements, incorrect behavior, unsupported scope, and weak or absent evidence for acceptance criteria. Check that each test reaches the agreed seam and would detect a plausible implementation that violates the requirement. Cite the requirement and code locations.
-- **Code reviewer:** compare the diff with repository instructions and conventions. Report concrete correctness, maintainability, security, concurrency, error-handling, and test-quality problems, including tests that mirror the implementation, mock the subject under test, bypass the public path, or overfit one fixture. Distinguish documented violations from judgment calls and skip issues enforced conclusively by passing tools.
+## Step 7: Finish
 
-If subagents are unavailable or delegation is prohibited, perform the two reviews separately in the main session. Review only implementation changes; mention relevant pre-existing problems separately without taking ownership of them.
+- Ensure final verification covers all review fixes. Reuse current passing evidence when no relevant change followed it.
+- Correct a supplied spec only for necessary factual corrections or approved decisions, preserving its intent.
+- Do not commit, push, open a pull request, deploy, or publish unless requested.
+- Report the outcome concisely:
 
-Each reviewer returns its own verdict and findings grouped as critical, important, or minor. Every finding must cite a file and line, the violated requirement or rule, why it matters, and a concrete fix when non-obvious. Reviewers list anything they could not verify rather than treating absence of evidence as approval.
-
-Keep the two reports separate so one axis cannot mask the other. Verify each finding against the requirements, evidence, and code; fix every valid in-scope issue and rerun affected focused checks. Return valid findings to the original implementer when available; otherwise apply the fixes directly. Reuse the original reviewers for fix rounds when available rather than spawning an agent per finding. For each fix round, re-review every open finding against the fix diff and check that the fix introduced no new material problem. Repeat the full two-axis review only when fixes materially change behavior or design. Stop when both axes approve with no material finding left, or when a concrete external blocker prevents completion.
-
-## Finish
-
-Run the final relevant verification suite after review fixes. Update a supplied requirements document only when implementation reveals a necessary factual correction or an explicitly approved decision; preserve its original intent.
-
-Report:
-
-- what changed and which acceptance criteria it satisfies;
-- tests and checks run, with their outcomes;
-- the requirements and code review verdicts and fixes made;
-- any remaining limitations or blockers;
-- the files changed.
-
-Do not commit, push, open a pull request, deploy, or publish unless the user requested that action.
+```text
+Changed: <files and acceptance criteria>
+Checks: <commands and outcomes, including red/green evidence>
+Review: <requirements verdict; code verdict; fixes>
+Limitations or blockers: <unverified items or required input>
+```
