@@ -48,7 +48,9 @@ Installer or network errors must be resolved and the requested command retried; 
 Use the brainstorm skill to design a searchable activity log for this project.
 ```
 
-The agent investigates the project, tracks decisions in chat, and asks one material question at a time, using the host's question UI when available. When seeing relationships helps, it creates a temporary offline HTML reference styled with embedded Pico CSS: before/after diagrams, static lifecycle views, UI comparisons, or a final review with explicit decision scope. All useful detail stays visible, and comparison cards have distinct colors and borders. Pages display information only; answers remain in chat. Once material decisions are settled or safely deferred, it writes the canonical spec to `docs/specs/yyyy-mm-dd-<slug>.md`, including acceptance criteria and test seams, without an extra confirmation round.
+The main agent investigates the project, tracks decisions in chat, and asks one material question at a time, using the host's question UI when available. It reconciles each answer and continues with remaining questions. Unanswered material decisions stay open unless you explicitly defer them or authorize a default. Before writing the spec, it checks every ledger entry for an answer or justified deferral. It then writes the canonical spec to `docs/specs/yyyy-mm-dd-<slug>.md`, including acceptance criteria and test seams, without an extra confirmation round.
+
+When seeing relationships helps, it creates a temporary offline HTML reference styled with embedded Pico CSS: before/after diagrams, static lifecycle views, UI comparisons, or a final review with explicit decision scope. All useful detail stays visible, and comparison cards have distinct colors and borders. Pages display information only; answers remain in chat. Subagents may help with fact lookup, option comparisons, visuals, or read-only review. The main agent reconciles answers, decides readiness, and writes the spec itself.
 
 ### Implement the spec
 
@@ -58,7 +60,7 @@ Start a **fresh session** in the same project:
 Use the implement skill with docs/specs/2026-09-10-activity-log.md.
 ```
 
-Replace the path with your spec. The agent implements with TDD and independently reviews spec compliance and code quality. It delegates when subagents are available and permitted; otherwise it works in the main session.
+Replace the path with your spec. The main agent plans and implements core behavior with TDD, integrates changes, and runs decisive acceptance checks. When available and permitted, subagents help with bounded research, isolated auxiliary edits, extra checks, and independent spec and code reviews. Otherwise, the main agent reviews both axes itself and reports that limitation.
 
 ### Debug a reported problem
 
@@ -66,7 +68,7 @@ Replace the path with your spec. The agent implements with TDD and independently
 Use the debug skill: the activity log repeats the last item when I load the next page.
 ```
 
-Debug works in the current session without a brainstorm spec. It reproduces the symptom, investigates root cause, observes a failing regression signal, makes the smallest supported fix, and verifies the original scenario. For flaky or performance problems it measures repeated behavior. If reproduction or access is missing, it gathers evidence and reports the specific blocker without claiming a speculative fix.
+Debug works in the current session without a brainstorm spec. The main agent reproduces the symptom, investigates root cause, observes a failing regression signal, makes the smallest supported fix, and verifies the original scenario. Subagents may help with code lookup, alternative hypotheses, extra checks, and independent reviews. For flaky or performance problems it measures repeated behavior. If reproduction or access is missing, it gathers evidence and reports the specific blocker without claiming a speculative fix.
 
 | Agent | Brainstorm | Implement | Debug |
 | --- | --- | --- | --- |
