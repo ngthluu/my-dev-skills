@@ -12,20 +12,20 @@ Turn the idea into a decision record and self-contained spec at `docs/specs/yyyy
 
 ## Working rules
 
-- The main agent owns user questions, decisions, and the ledger. Subagents propose updates with evidence and uncertainties.
-- Delegate the stages below when available and permitted. Otherwise work directly. Handle trivial updates directly.
-- Reuse agents with current context, parallelize independent investigations, and give writers separate files.
+- The main agent inspects context, maps decisions, asks questions, reconciles the ledger, checks readiness, and writes the spec itself.
+- Use subagents only when useful, available, and permitted for bounded fact lookup, option comparisons, visuals, or read-only reviews.
+- Give side tasks current evidence and clear scope. Reuse agents when useful, isolate visual files, and prohibit further delegation.
 - Verify findings before using them. Present conclusions and conflicts, keeping raw investigation logs out of chat.
 
 ## Step 1: Inspect context
 
-- Delegate inspection of the workspace, repository instructions, existing artifacts, and prior answers.
+- Inspect the workspace, repository instructions, existing artifacts, and prior answers yourself.
 - Research material unknowns using reliable primary sources. Check dates and applicability, retain links, and label assumptions.
 - Reconcile findings and extract existing decisions. Find available facts instead of asking the user to retrieve them.
 
 ## Step 2: Map decisions
 
-- Have subagents identify material decisions, dependencies, and shared prerequisites. Split complex independent branches.
+- Identify material decisions, dependencies, and shared prerequisites yourself. Use side research for complex independent branches.
 - Integrate findings into a dependency graph before the first question. Revise it as answers reveal branches.
 - Maintain this session ledger with stable IDs and statuses: `settled`, `open`, `blocked`, `deferred`, or `contradicted`.
 
@@ -39,35 +39,43 @@ Answer/source: <answer and evidence> | Reopened/deferred reason: <if applicable>
 ## Step 3: Ask one material question
 
 - Select exactly one eligible open node with settled prerequisites or explicit safe deferrals.
-- Prefer outcome impact or unlocking potential. Break a genuine tie by stable ID. Delegate complex option analysis.
-- Explain why the decision matters, recommend an answer, and state its tradeoff. Skip duplicate or optional questions.
+- Ask one at a time, then repeat until discovery is complete. This is not a one-question limit for the whole session.
+- Prefer outcome impact or unlocking potential. Break a genuine tie by stable ID. Option analysis may be a side task.
+- Explain why the decision matters, recommend an answer, and state its tradeoff. Skip questions already resolved by evidence.
 - Use a suitable host question tool with one question, without repeating it in chat.
 - If unavailable, restricted, or unsuitable, ask one plain chat question in the final response, never in commentary.
-- Do not change collaboration mode to access a tool. Wait for the answer, then follow Step 4.
+- Do not change collaboration mode to access a tool. Wait for an actual answer, then follow Step 4.
+- A nonblocking question tool or empty result is not an answer. Keep the question pending and stop dependent work until a reply arrives.
 
-For spatial, stateful, comparative, or quantitative relationships, delegate a browser visual when clearer than prose or a table.
+For spatial, stateful, comparative, or quantitative relationships, create a browser visual when clearer than prose or a table.
 
-- Have the writer read [references/visual-workspace.md](references/visual-workspace.md). Check its artifact and verification findings.
+- The visual writer reads [references/visual-workspace.md](references/visual-workspace.md). Check its artifact and verification findings.
 - Keep chat as the input channel and ledger authority, the Markdown spec canonical, and the page display-only.
 - Update visuals for material model changes and carry validated conclusions into the spec.
 - Save a linked HTML companion beside the spec only when requested.
 
 ## Step 4: Reconcile and repeat
 
-- Reuse one reconciliation subagent for each substantive reply, supplying the whole latest message, new evidence, and complete ledger.
-- Request proposed answer, assumption, dependency, and contradiction updates with evidence. Verify and apply before another question.
+- Read the whole latest message, new evidence, and complete ledger yourself. Reconcile answers, dependencies, and contradictions.
+- Apply only supported status changes. A recommendation, subagent proposal, or unanswered question is not a user answer.
 - Match by meaning and settle several decisions when answered together. For partial or ambiguous answers, ask only missing material detail.
+- Keep unanswered nodes open or blocked. Defer a material choice only when the user explicitly postpones it or authorizes a default.
+- Defer minor implementation details only when they do not change scope, behavior, acceptance criteria, or material risk.
+- Record each deferral's reason, assumption, and source. Explicitly writing an assumption does not settle a material choice.
 - Never treat silence as agreement. Reopen settled decisions only when evidence contradicts or invalidates them.
 - Mark conflicts `contradicted`, explain them, and ask the smallest resolving question. Record its resolution and source.
 - Never reask solely because the graph changed. Return to Step 3 for remaining material decisions.
-- Before finishing, delegate a gap check: unresolved branches, assumptions, failures, migration, compatibility, and operations.
-- Finish discovery when all material branches are settled or safely deferred with explicit assumptions. Summarize without another confirmation.
+- Check gaps yourself: unresolved branches, assumptions, failures, migration, compatibility, and operations. A side review may help.
+- Audit every ledger ID before finishing. Each needs an answer/source or justified deferral. Preserve reasons for merged or excluded nodes.
+- Any material open, blocked, or contradicted node prevents completion. Resolve it or obtain an explicit deferral, then return to Step 3.
+- Finish only when this audit passes. Summarize without another confirmation.
 
 ## Step 5: Write the spec
 
-- Delegate drafting from the settled ledger and evidence. Pair every observable acceptance criterion with an agreed public test seam.
+- Enter this step only after your full ledger audit passes. Do not write a ready spec while material decisions remain unresolved.
+- Write the spec yourself from the reconciled ledger and evidence. Pair every observable acceptance criterion with an agreed public test seam.
 - Use the template below, omitting inapplicable conditional details. Prefer existing interfaces and practical test boundaries.
-- Have a separate subagent review against the ledger and evidence. Verify findings and return material decision gaps to Step 3.
+- Optionally use a read-only subagent to review against the ledger and evidence. Verify findings and return material gaps to Step 3.
 - Create `docs/specs/` if needed. Use the local date and a lowercase hyphenated slug, making it more specific if the path exists.
 - Write without final confirmation. Update an existing spec only when requested. Exclude secrets and sensitive personal data.
 - Reference existing artifacts by path and make the spec sufficient without temporary HTML.

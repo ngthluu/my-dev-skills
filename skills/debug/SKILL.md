@@ -12,22 +12,22 @@ Take the reported symptom through diagnosis to a verified fix in this session. M
 
 ## Working rules
 
-- The main agent owns user questions, evidence, cause decisions, integration, and verification.
-- Delegate the stages below when available and permitted. Otherwise work directly. Handle trivial tasks directly.
+- The main agent inspects the report, reproduces the failure, diagnoses the cause, writes the regression and fix, and verifies the result itself.
+- Use subagents only when useful, available, and permitted for bounded code lookup, alternative hypotheses, extra checks, or read-only review.
 - Give agents current evidence, rules, and explicit file or environment ownership. Reuse them with updated context.
-- Parallelize independent inspection. Serialize writes and probes unless files, dependencies, and environments are isolated.
+- Parallelize independent side tasks without further delegation. Serialize writes and probes unless dependencies and environments are isolated.
 - Prevent probes from altering each other's signal or competing for measurement resources.
 - Verify returned evidence, actions, and uncertainties. Present useful conclusions, keeping raw reports out of chat.
 
 ## Step 1: Inspect the report
 
-- Delegate inspection of repository instructions, relevant code, ADRs, recent changes, and expected versus actual behavior.
+- Inspect repository instructions, relevant code, ADRs, recent changes, and expected versus actual behavior yourself.
 - Research material unknowns using reliable primary sources. Check dates and applicability, retaining links.
 - Capture the starting Git ref, status, and relevant diff. Reconcile findings and preserve unrelated user changes.
 
 ## Step 2: Reproduce the signal
 
-- Delegate reproduction at a meaningful public boundary: test, CLI, HTTP request, browser flow, replay, or focused harness.
+- Reproduce the signal yourself at a meaningful public boundary: test, CLI, HTTP request, browser flow, replay, or focused harness.
 - Capture the specific failure and a working comparison when useful. Unrelated setup errors or non-crashing runs are not reproduction.
 - Reduce inputs while preserving the signal. Stop minimization once the cause is evidenced.
 - For flakes, repeat triggers and record failures/attempts, timing, seeds, and environment. Use controlled scheduling or stress if useful.
@@ -39,7 +39,8 @@ Take the reported symptom through diagnosis to a verified fix in this session. M
 
 ## Step 3: Diagnose the cause
 
-- Delegate independent hypotheses and tracing across callers and system boundaries. Compare working inputs, configuration, and changes.
+- Trace callers and system boundaries yourself. Optional side investigations may propose alternative hypotheses with evidence.
+- Compare working inputs, configuration, and changes. Decide the cause from distinguishing evidence yourself.
 - Test a falsifiable cause prediction with a distinguishing probe, varying one factor at a time.
 - Reconcile evidence and rank hypotheses after each probe. An obvious bug does not require a hypothesis quota.
 - When uncertain, share this update without turning it into an approval checkpoint:
@@ -58,22 +59,22 @@ Next probe: <prediction and distinguishing command>
 
 ## Step 4: Fix the supported cause
 
-- Delegate regression and fix together after evidence supports the cause, supplying reproduction, rules, criteria, and file ownership.
+- Write the regression and fix yourself after evidence supports the cause. Keep the reproduction, rules, and criteria in view.
 - Write a regression for the actual bug pattern at a meaningful automated seam. Observe failure for the reported reason before the fix.
 - Exercise the interaction for cross-boundary or multi-caller bugs. Make the smallest evidence-supported change.
 - If no meaningful automated seam exists, explain why and use the strongest observable check. Avoid coverage-only tests.
-- Inspect and integrate the result with regression red/green and original reproduction evidence.
+- Inspect the result against regression red/green and original reproduction evidence.
 
 ## Step 5: Verify the fix
 
 - Run the regression green, original unminimized scenario, and relevant neighboring checks. Investigate failures.
-- Delegate checks when useful, specifying the current revision and environment. Inspect evidence before claiming success.
+- Extra checks may be side tasks with a specified revision and environment. Verify the original failure yourself before claiming success.
 - Repeat comparable flaky/performance measurements. Report bounded results: finite successful runs cannot prove a race absent.
 
 ## Step 6: Review independently
 
 - If no behavior changed, skip fix review and report whether the symptom was reproduced, resolved without edits, unconfirmed, or blocked.
-- Give two independent reviewers the report, reproduction, cause evidence, baseline, fix diff, rules, and verification.
+- When delegation is available and permitted, give two reviewers the report, reproduction, cause evidence, baseline, fix diff, rules, and checks.
 - Use reviewers who did not implement the fix. Run read-only reviews in parallel without further delegation.
 - If delegation is unavailable or prohibited, review each axis yourself and disclose the limitation.
 - **Cause and regression:** check cause evidence, test seam, detection of the bug or a plausible equivalent, and original reproduction.
@@ -84,14 +85,14 @@ Next probe: <prediction and distinguishing command>
 
 ## Step 7: Resolve review findings
 
-- Verify findings against evidence and code. Fix valid in-scope issues, reusing the original implementer and reviewers.
+- Verify findings against evidence and code. Fix valid in-scope issues yourself and reuse the original reviewers.
 - Rerun affected regression and original reproduction. Recheck every open finding and new problems introduced by fixes.
 - Repeat full reviews when cause, behavior, or design changes materially.
 - Continue until both axes approve without material findings or a concrete external blocker prevents completion.
 
 ## Step 8: Clean up and report
 
-- Delegate an audit of temporary instrumentation, disposable harnesses, final diff, and untracked files against the baseline.
+- Audit temporary instrumentation, disposable harnesses, final diff, and untracked files against the baseline. A read-only side check may help.
 - Remove temporary artifacts while preserving user files. Retain harnesses only for explicit regression or benchmark purposes.
 - Verify cleanup and ensure final checks cover review fixes. Reuse current passing evidence if no relevant change followed it.
 - Report in chat without requiring a commit, publication, or diagnosis document:
