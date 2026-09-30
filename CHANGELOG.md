@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## [0.1.8]
+
+- Kept core brainstorm, implementation, and debugging work with the main agent, with subagents limited to bounded supporting tasks and reviews.
+- Strengthened brainstorm instructions to continue asking and reconciling questions until every material decision is answered or explicitly deferred before writing the spec.
+
 ## [0.1.7]
 
 - Hid the repository-local release-notes skill from the public installer skill list.
