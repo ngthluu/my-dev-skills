@@ -5,7 +5,6 @@ import { resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
 const skill = readFileSync(resolve(root, "skills/brainstorm/SKILL.md"), "utf8");
-const visual = readFileSync(resolve(root, "skills/brainstorm/references/visual-workspace.md"), "utf8");
 const readme = readFileSync(resolve(root, "README.md"), "utf8");
 const specTemplate = readFileSync(resolve(root, "skills/brainstorm/references/spec-template.md"), "utf8");
 
@@ -36,7 +35,7 @@ test("brainstorm presents a short, ordered workflow with copyable handoff artifa
   );
   assert.ok(handoff, "copyable handoff spec template");
   assert.doesNotMatch(handoff, /, and handoff|Use \$implement with|^- (?:Status|Date):/m);
-  assert.match(skill, /Reply with only the spec path: `\.my-dev-skills\/<slug>\/README\.md`/);
+  assert.match(skill, /Reply with only the spec path: `\.my-dev-skills\/yyyy-mm-dd-<slug>\/README\.md`/);
   assert.doesNotMatch(skill, /Use \$implement/);
   assert.ok(skill.trim().split(/\s+/).length < 1126, "shorter than the original skill");
 });
@@ -60,11 +59,8 @@ test("brainstorm retains decision reconciliation and one-question selection", ()
   assert.match(skill, /wait for.*answer/i);
 });
 
-test("brainstorm keeps visual authority and fresh-session handoff", () => {
-  assert.match(skill, /\[references\/visual-workspace\.md\]\(references\/visual-workspace\.md\)/);
-  assert.match(skill, /(?:spatial|stateful|comparative|quantitative)/i);
-  assert.match(skill, /chat.*(?:authoritative|input channel)/i);
-  assert.match(skill, /(?:Markdown spec|spec).*canonical/i);
+test("brainstorm keeps fresh-session handoff", () => {
+  assert.doesNotMatch(skill, /visual/i);
   assert.match(skill, /(?:without|no).*confirmation/i);
   for (const file of ["context.md", "README.md"]) assert.match(skill, new RegExp(`Write \`${file}\``));
   assert.match(skill, /\[references\/spec-template\.md\]\(references\/spec-template\.md\)/);
@@ -72,6 +68,5 @@ test("brainstorm keeps visual authority and fresh-session handoff", () => {
   assert.match(skill, /\.my-dev-skills\/\.gitignore` containing `\*`/);
   assert.doesNotMatch(skill, /docs\/specs/);
   assert.match(skill, /fresh.*session/i);
-  assert.doesNotMatch(visual, /confirmation request in chat/i);
   assert.doesNotMatch(readme, /After your final confirmation/i);
 });

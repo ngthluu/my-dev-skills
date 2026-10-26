@@ -13,25 +13,25 @@ Turn the idea into a handoff spec that gives a fresh implement session full cont
 ## Working rules
 
 - The main agent inspects context, maps decisions, asks questions, reconciles the ledger, checks readiness, and writes the spec itself.
-- Use subagents only when useful, available, and permitted for bounded fact lookup, option comparisons, visuals, or read-only reviews.
-- Give side tasks current evidence and clear scope. Isolate visual files, and prohibit further delegation.
+- Use subagents only when useful, available, and permitted for bounded fact lookup, option comparisons, or read-only reviews.
+- Give side tasks current evidence and clear scope, and prohibit further delegation.
 - Verify findings before using them. Present conclusions and conflicts, keeping raw investigation logs out of chat.
 - Work through the steps in order. Each step writes its file in the session folder before the next step starts.
 
 ```text
 .my-dev-skills/.gitignore    *
-.my-dev-skills/<slug>/
+.my-dev-skills/yyyy-mm-dd-<slug>/
   context.md   Step 2
   ledger.json  Steps 3-5, via scripts/ledger.mjs
-  visuals/     Step 4, optional
   review.md    Step 6, optional
   README.md    Step 6, the spec
 ```
 
 ## Step 1: Set up the folder
 
-- Pick a lowercase hyphenated slug from the request. Make it more specific if `.my-dev-skills/<slug>/` exists.
-- Create `.my-dev-skills/<slug>/`. Add `.my-dev-skills/.gitignore` containing `*` if it is missing.
+- Pick a lowercase hyphenated slug from the request. Prefix it with today's date as `yyyy-mm-dd-`.
+- Make the slug more specific if `.my-dev-skills/yyyy-mm-dd-<slug>/` exists.
+- Create `.my-dev-skills/yyyy-mm-dd-<slug>/`. Add `.my-dev-skills/.gitignore` containing `*` if it is missing.
 - Reuse an existing folder only when asked.
 
 ## Step 2: Inspect context
@@ -73,12 +73,6 @@ L audit
 - Do not change collaboration mode to access a tool. Wait for an actual answer, then follow Step 5.
 - A nonblocking question tool or empty result is not an answer. Keep the question pending and stop dependent work until a reply arrives.
 
-For spatial, stateful, comparative, or quantitative relationships, create a browser visual when clearer than prose or a table.
-
-- The visual writer reads [references/visual-workspace.md](references/visual-workspace.md). Check its artifact and verification findings.
-- Save visuals in `visuals/`. Keep chat as the input channel, `ledger.json` authoritative, the Markdown spec canonical, and pages display-only.
-- Update visuals for material model changes and carry validated conclusions into the spec.
-
 ## Step 5: Reconcile and repeat
 
 - Read the whole latest message, new evidence, and `show` output yourself. Reconcile answers, dependencies, and contradictions.
@@ -109,4 +103,4 @@ For spatial, stateful, comparative, or quantitative relationships, create a brow
 
 ## Step 7: Report the spec path
 
-- Reply with only the spec path: `.my-dev-skills/<slug>/README.md`.
+- Reply with only the spec path: `.my-dev-skills/yyyy-mm-dd-<slug>/README.md`.

@@ -1,6 +1,6 @@
 # Spec template
 
-Write the handoff spec as `.my-dev-skills/<slug>/README.md` with this structure. Replace each placeholder and omit empty sections.
+Write the handoff spec as `.my-dev-skills/yyyy-mm-dd-<slug>/README.md` with this structure. Replace each placeholder and omit empty sections.
 
 ```markdown
 # <task title>

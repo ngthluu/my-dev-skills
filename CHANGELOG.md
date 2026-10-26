@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Brainstorm session folders are now date-prefixed as `.my-dev-skills/yyyy-mm-dd-<slug>/`.
+- Removed brainstorm's visual workspace: the HTML templates, examples, and `visuals/` folder.
+
 ## [0.1.9]
 
 - Changed brainstorm to write a temporary handoff spec to `.my-dev-skills/<slug>/README.md`, which is ignored by Git, instead of committing a spec under `docs/specs/`. The spec now covers the goal, current state, where to change, acceptance criteria, suggested slices, and verification commands. Brainstorm replies with only the spec path.

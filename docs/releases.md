@@ -2,7 +2,7 @@
 
 Versions are chosen explicitly. Release tags (`vX.Y.Z`, optionally SemVer prereleases such as `v0.3.0-rc.1`) are immutable. Build metadata is intentionally unsupported so each version has one tag identity. `latest` is a branch at the exact commit of the highest stable **published** GitHub Release; it is never the development branch. Prereleases and drafts are excluded. Versions are compared numerically, so `0.10.0` sorts after `0.9.0`.
 
-Use Node 22.20 or newer, Git, and authenticated GitHub CLI (`gh`) for maintainer commands. Install development checks with `npm ci` and `npx playwright install chromium` (Linux CI also needs `--with-deps`). Installation of the skills themselves does not need this development toolchain.
+Use Node 22.20 or newer, Git, and authenticated GitHub CLI (`gh`) for maintainer commands. Install development checks with `npm ci`. Installation of the skills themselves does not need this development toolchain.
 
 Use a single `origin` URL on `github.com`: HTTPS, `git@github.com:owner/repo.git`, or `ssh://git@github.com/owner/repo.git`. Do not configure a separate `remote.origin.pushurl` for release commands. The CLI derives the publication repository from this origin and explicitly targets it for every GitHub operation, regardless of `GH_REPO` or the GitHub CLI default repository. This keeps tag validation, publication, and `latest` reconciliation tied to the same repository. Unsupported origin forms fail before publication.
 
