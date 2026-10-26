@@ -23,7 +23,7 @@ Deliver the requested change or supplied spec completely. Follow repository inst
 
 - Read the entire supplied spec and its required artifacts yourself. Otherwise use the current request as the contract.
 - Identify observable acceptance criteria and public test seams. Ask only about unresolved material product decisions.
-- Inspect repository rules, relevant code, prior decisions, and verification commands yourself before editing.
+- Inspect repository rules, relevant code, prior decisions, and verification commands yourself. Confirm a spec's Where to change paths.
 - Resolve material unknowns through inspection and primary-source research. Check dates, retain links, and distinguish assumptions.
 - Reconcile evidence and record the starting Git ref, status, and relevant diff before mutations. Keep the agreed scope.
 
@@ -31,6 +31,8 @@ Deliver the requested change or supplied spec completely. Follow repository inst
 
 - Decide boundaries, dependencies, and risks yourself. Use focused side investigations when useful and verify their evidence.
 - Divide work into small vertical slices, each delivering one observable behavior at an agreed public seam.
+- Start from a spec's Suggested slices. Change them only when the code requires it, and say why.
+- Name each slice's data shape first. Prefer one structure, such as a union, table, or state machine, over scattered conditionals.
 
 ## Step 3: Implement with red and green tests
 
@@ -44,6 +46,12 @@ Deliver the requested change or supplied spec completely. Follow repository inst
 4. Run the focused test and neighboring tests green. Refactor while tests stay green.
 5. Repeat for the next behavior instead of writing a batch of tests ahead of implementation.
 
+- Write the least code that meets the contract. Delete replaced paths, dead code, and redundant checks in touched code first.
+- Reuse existing helpers. Add no abstraction, option, or wrapper without a current second caller.
+- Validate external input once at its boundary. Do not recheck states that internal types already exclude.
+- Replace an internal API by migrating its callers and deleting it in the same change. Add no compatibility shim.
+- Comment only a non-obvious why that the code cannot show. No narration and no workaround justifications.
+
 - Assert outcomes through the real public path using expected values from requirements, known literals, or worked examples.
 - Do not mirror the production algorithm, mock the behavior under test, or weaken a correct test to pass.
 - Avoid private-method tests, internal mocks, tautologies, conditional assertions, and checks that only assert no crash.
@@ -53,7 +61,9 @@ Deliver the requested change or supplied spec completely. Follow repository inst
 ## Step 4: Verify the implementation
 
 - Run focused tests and available typechecking during implementation.
+- Before review, read the whole diff. Remove code that no criterion or test needs, then rerun affected checks.
 - After integration, run defined formatting, lint, typechecking, the full relevant test suite, and build. Resolve failures.
+- Also run a spec's Verification commands. Report missing or broken ones.
 - Extra checks may be side tasks. Run decisive acceptance checks yourself and inspect commands, outcomes, and failure evidence.
 
 ## Step 5: Review independently
@@ -64,6 +74,7 @@ Deliver the requested change or supplied spec completely. Follow repository inst
 - If delegation is unavailable or prohibited, review the two axes separately yourself and disclose the limitation.
 - **Requirements:** check missing criteria, incorrect behavior, unsupported scope, and evidence at each public test seam.
 - **Code:** check correctness, maintainability, security, concurrency, errors, conventions, and test quality.
+- Ask what could be deleted or merged without changing behavior. Flag one-caller layers, speculative options, and guards hiding bugs.
 - Check that tests catch plausible violations. Flag mirrored algorithms, internal mocks, bypassed seams, and overfit fixtures.
 - Separate rule violations from judgment calls. Skip issues conclusively enforced by passing tools.
 - Review implementation changes, mentioning relevant pre-existing issues separately. Keep reports and unverifiable items explicit.
