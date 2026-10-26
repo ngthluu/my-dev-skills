@@ -1,6 +1,6 @@
 # Visual workspace
 
-Create a display-only browser reference when seeing relationships helps the user decide. Chat owns answers and confirmed decisions; the final Markdown spec is canonical.
+Create a display-only browser reference when seeing relationships helps the user decide. Chat is the input channel, `ledger.json` records decisions, and the final Markdown spec is canonical.
 
 ## 1. Choose the visual
 
@@ -22,12 +22,12 @@ Examples: [layout comparison](../examples/layout-comparison.html), [review flow]
 
 ## 2. Build the reference
 
-- Copy a template to a fresh, descriptive HTML filename in the OS temporary directory. Replace examples and remove unused sections.
+- Copy a template to a fresh, descriptive HTML filename in the session's `.my-dev-skills/<slug>/visuals/` folder. Replace examples and remove unused sections.
 - Escape user-supplied text as HTML. Exclude secrets, private customer data, and unnecessary source content.
 - Keep embedded Pico CSS and its MIT license inline so the file works independently and offline. Add no remote resources or project dependencies.
 - Use stable IDs shared with chat and the spec: `Q` questions, `D` decisions, `A` assumptions, `R` risks, `AC` acceptance criteria.
 - Keep IDs in anchors unless readers need them. Label proposed versus confirmed decisions, and synthetic samples as “Example.”
-- Show dates only when freshness matters or for a requested durable companion.
+- Show dates only when freshness matters.
 
 ### Content
 
@@ -63,4 +63,4 @@ Rendering checks alone do not establish model correctness. Displaying a decision
 
 - Refresh only for material model changes. Present the final decision summary in chat without an extra confirmation round.
 - Carry every confirmed visual conclusion into the Markdown spec. Implementation must not depend on temporary HTML.
-- Save a durable HTML companion only when requested. Place it beside the spec, include the canonical spec path and generation time, and keep both consistent.
+- Visuals stay in `visuals/` beside the spec. Link one from the spec only when requested, and keep both consistent.

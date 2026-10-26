@@ -7,6 +7,7 @@ const root = resolve(import.meta.dirname, "..");
 const skill = readFileSync(resolve(root, "skills/brainstorm/SKILL.md"), "utf8");
 const visual = readFileSync(resolve(root, "skills/brainstorm/references/visual-workspace.md"), "utf8");
 const readme = readFileSync(resolve(root, "README.md"), "utf8");
+const specTemplate = readFileSync(resolve(root, "skills/brainstorm/references/spec-template.md"), "utf8");
 
 test("brainstorm presents a short, ordered workflow with copyable handoff artifacts", () => {
   const steps = [...skill.matchAll(/^## Step (\d+): (.+)$/gm)];
@@ -19,12 +20,14 @@ test("brainstorm presents a short, ordered workflow with copyable handoff artifa
   assert.ok(instructions.every((line) => line.length <= 150 && !line.includes(";")),
     "keep bullets short without semicolon-linked clauses");
   assert.ok(templates.some((template) => [
-    /question/i, /prerequisites/i, /impact/i, /status/i,
-    /answer/i, /source/i, /reason/i,
-  ].every((field) => field.test(template))), "copyable decision ledger template");
-  const handoff = templates.find((template) =>
-    /(?:status|date|source)/i.test(template)
+    /ledger\.mjs|^L /m, /--question/, /--prereq/, /--impact/, /--status/,
+    /--answer/, /--source/, /--reason/, /\bnext\b/, /\baudit\b/,
+  ].every((field) => field.test(template))), "copyable ledger script usage");
+  const handoff = [specTemplate].find((template) =>
+    /## Goal/.test(template)
     && /current state/i.test(template)
+    && /where to change/i.test(template)
+    && /verification/i.test(template)
     && /decisions/i.test(template)
     && /requirements/i.test(template)
     && /acceptance criteria/i.test(template)
@@ -32,8 +35,9 @@ test("brainstorm presents a short, ordered workflow with copyable handoff artifa
     && /risks/i.test(template)
   );
   assert.ok(handoff, "copyable handoff spec template");
-  assert.doesNotMatch(handoff, /, and handoff|Use \$implement with docs\/specs\/yyyy-mm-dd-<slug>\.md\./);
-  assert.match(skill, /Tell the user to start a new session with `Use \$implement with <spec-path>\.`/);
+  assert.doesNotMatch(handoff, /, and handoff|Use \$implement with|^- (?:Status|Date):/m);
+  assert.match(skill, /Reply with only the spec path: `\.my-dev-skills\/<slug>\/README\.md`/);
+  assert.doesNotMatch(skill, /Use \$implement/);
   assert.ok(skill.trim().split(/\s+/).length < 1126, "shorter than the original skill");
 });
 
@@ -62,7 +66,11 @@ test("brainstorm keeps visual authority and fresh-session handoff", () => {
   assert.match(skill, /chat.*(?:authoritative|input channel)/i);
   assert.match(skill, /(?:Markdown spec|spec).*canonical/i);
   assert.match(skill, /(?:without|no).*confirmation/i);
-  assert.match(skill, /docs\/specs\/yyyy-mm-dd-<slug>\.md/);
+  for (const file of ["context.md", "README.md"]) assert.match(skill, new RegExp(`Write \`${file}\``));
+  assert.match(skill, /\[references\/spec-template\.md\]\(references\/spec-template\.md\)/);
+  assert.match(skill, /`ledger\.json` through \[scripts\/ledger\.mjs\]\(scripts\/ledger\.mjs\)/);
+  assert.match(skill, /\.my-dev-skills\/\.gitignore` containing `\*`/);
+  assert.doesNotMatch(skill, /docs\/specs/);
   assert.match(skill, /fresh.*session/i);
   assert.doesNotMatch(visual, /confirmation request in chat/i);
   assert.doesNotMatch(readme, /After your final confirmation/i);
