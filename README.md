@@ -87,7 +87,7 @@ Anyone is welcome to open an [issue](https://github.com/ngthluu/my-dev-skills/is
 
 The repository-local [release-version skill](.claude/skills/release-version/SKILL.md) helps the maintainer update `CHANGELOG.md` and prepare reviewed GitHub notes. It is not part of the published `skills/` package.
 
-Run `npm ci`, `npx playwright install chromium`, and `npm test` for release tooling, real installer fixtures, and offline browser checks. These development dependencies are not needed to use the skills. Also run `npm run validate` and `git diff --check`. No application build or typecheck is defined. Scenario evaluations of agent behavior are separate from installation and deterministic tooling checks; see [validation evidence](docs/validation.md).
+Run `npm ci`, `npx playwright install chromium`, and `npm test` for release tooling, real installer fixtures, and offline browser checks. These development dependencies are not needed to use the skills. Also run `npm run validate` and `git diff --check`. No application build or typecheck is defined. Scenario evaluations of agent behavior are separate from installation and deterministic tooling checks.
 
 See the [maintainer release guide](docs/releases.md) for version selection, validation, review/commit/tag/push steps, required repository permissions, publication recovery, and the first remote installation smoke test. Preparing a version locally does not publish it.
 

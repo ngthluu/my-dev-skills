@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## [0.1.9]
+
+- Changed brainstorm to write a temporary handoff spec to `.my-dev-skills/<slug>/README.md`, which is ignored by Git, instead of committing a spec under `docs/specs/`. The spec now covers the goal, current state, where to change, acceptance criteria, suggested slices, and verification commands. Brainstorm replies with only the spec path.
+- Brainstorm now records its context, decision ledger, optional visuals, and review in the session folder. The ledger is managed by a bundled Node.js script that checks for required evidence and audits for unresolved decisions before writing the spec. Questions that a throwaway experiment can settle get the experiment instead of a question to the user.
+- Implement now plans from a spec's suggested slices, confirms its file paths, runs its verification commands, and favors minimal code with no speculative abstractions or compatibility shims.
+- Debug now fixes faults where they start rather than where they show, reverts edits made for refuted hypotheses, and ships no speculative changes beside the fix.
+- Renamed the repository-local maintainer skill from release-notes to release-version.
+
 ## [0.1.8]
 
 - Kept core brainstorm, implementation, and debugging work with the main agent, with subagents limited to bounded supporting tasks and reviews.
