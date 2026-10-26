@@ -22,7 +22,7 @@ Turn the idea into a handoff spec that gives a fresh implement session full cont
 .my-dev-skills/.gitignore    *
 .my-dev-skills/yyyy-mm-dd-<slug>/
   context.md   Step 2
-  ledger.json  Steps 3-5, via scripts/ledger.mjs
+  ledger.json  Steps 3-5, via scripts/ledger.py
   review.md    Step 6, optional
   README.md    Step 6, the spec
 ```
@@ -46,7 +46,7 @@ Turn the idea into a handoff spec that gives a fresh implement session full cont
 
 - Identify material decisions, dependencies, and shared prerequisites yourself.
 - Integrate findings into a dependency graph before the first question. Revise it as answers reveal branches.
-- Record each decision with a stable ID in `ledger.json` through [scripts/ledger.mjs](scripts/ledger.mjs). Never edit the JSON by hand.
+- Record each decision with a stable ID in `ledger.json` through [scripts/ledger.py](scripts/ledger.py). Never edit the JSON by hand.
 - Statuses are `settled`, `open`, `blocked`, `deferred`, or `contradicted`. The script rejects changes without required evidence.
 
 ```text
@@ -59,7 +59,7 @@ L next
 L audit
 ```
 
-- `L` is `node <skill-dir>/scripts/ledger.mjs <folder>`. Show relevant entries in chat and rerun `show` after compaction.
+- `L` is `python3 <skill-dir>/scripts/ledger.py <folder>`. Show relevant entries in chat and rerun `show` after compaction.
 
 ## Step 4: Ask one material question
 

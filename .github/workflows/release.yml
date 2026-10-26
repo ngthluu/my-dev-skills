@@ -21,17 +21,19 @@ jobs:
         with:
           ref: ${{ inputs.tag || github.ref }}
           fetch-depth: 0
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: npm
       - name: Validate release tag matches plugin versions
         env:
           RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
-        run: node scripts/version.mjs validate "$RELEASE_TAG"
-      - run: npm ci --ignore-scripts
+        run: uv run scripts/version.py validate "$RELEASE_TAG"
+      - run: uv sync --frozen
       - name: Validate committed tag, run required tests, publish, and reconcile latest
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
-        run: node scripts/release.mjs "$RELEASE_TAG"
+        run: uv run scripts/release.py "$RELEASE_TAG"

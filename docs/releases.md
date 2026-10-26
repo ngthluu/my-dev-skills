@@ -2,7 +2,7 @@
 
 Versions are chosen explicitly. Release tags (`vX.Y.Z`, optionally SemVer prereleases such as `v0.3.0-rc.1`) are immutable. Build metadata is intentionally unsupported so each version has one tag identity. `latest` is a branch at the exact commit of the highest stable **published** GitHub Release; it is never the development branch. Prereleases and drafts are excluded. Versions are compared numerically, so `0.10.0` sorts after `0.9.0`.
 
-Use Node 22.20 or newer, Git, and authenticated GitHub CLI (`gh`) for maintainer commands. Install development checks with `npm ci`. Installation of the skills themselves does not need this development toolchain.
+Use [uv](https://docs.astral.sh/uv/) with Python 3.11 or newer, Git, and authenticated GitHub CLI (`gh`) for maintainer commands. Install development checks with `uv sync`. The installer fixture also needs Node.js and npm to fetch the published `skills` CLI. Installation of the skills themselves does not need this development toolchain.
 
 Use a single `origin` URL on `github.com`: HTTPS, `git@github.com:owner/repo.git`, or `ssh://git@github.com/owner/repo.git`. Do not configure a separate `remote.origin.pushurl` for release commands. The CLI derives the publication repository from this origin and explicitly targets it for every GitHub operation, regardless of `GH_REPO` or the GitHub CLI default repository. This keeps tag validation, publication, and `latest` reconciliation tied to the same repository. Unsupported origin forms fail before publication.
 
@@ -11,9 +11,9 @@ Before tagging a new release, use the repository-local [release-version skill](.
 Prepare the first release:
 
 ```sh
-node scripts/version.mjs set 0.1.0
-node scripts/version.mjs validate v0.1.0
-npm test
+uv run scripts/version.py set 0.1.0
+uv run scripts/version.py validate v0.1.0
+uv run pytest
 git diff
 ```
 
@@ -29,7 +29,7 @@ git push origin v0.1.0
 
 These are maintainer actions; implementation of the spec does not authorize running them. Never recreate, force-push, or move an existing version tag. Correct a bad published release with a new version.
 
-The release workflow checks out the tag and runs `node scripts/release.mjs v0.1.0`. This command checks the remote tag's commit against the local immutable tag, validates **committed** manifests, and runs all committed `tests/*.test.mjs` in a detached temporary worktree before publication. When a lockfile exists, it installs that commit's development dependencies with `npm ci --ignore-scripts`. Failed checks prevent publication. The working directory's uncommitted files cannot substitute for release contents. It creates a GitHub Release using the already-pushed tag (`--verify-tag`) and the tagged release notes when present; it never creates or rewrites remote version tags.
+The release workflow checks out the tag and runs `uv run scripts/release.py v0.1.0`. This command checks the remote tag's commit against the local immutable tag, validates **committed** manifests, and runs all committed `tests/test_*.py` in a detached temporary worktree before publication. When `uv.lock` exists, it runs them with that commit's locked development dependencies through `uv run --frozen pytest`. Failed checks prevent publication. The working directory's uncommitted files cannot substitute for release contents. It creates a GitHub Release using the already-pushed tag (`--verify-tag`) and the tagged release notes when present; it never creates or rewrites remote version tags.
 
 After successful publication, the command queries every page of GitHub Releases and reconciles `latest`. Updates use an explicit Git compare-and-swap lease. A losing concurrent writer rereads both release records and the branch before retrying, so an older job cannot overwrite a newer published version. Workflow serialization additionally reduces contention; correctness does not depend on job ordering. A retry recognizes an existing published release and does not duplicate it. The repository's `latest` branch is independent of GitHub's UI “Latest” badge.
 
@@ -42,7 +42,7 @@ If validation reports `inconsistent manifest version`, the tag points to a commi
 Release publication and the branch update cannot be atomic. A failed/uncertain publication leaves `latest` untouched and reports failure. A successful publication followed by a rejected branch push reports a partial failure; users may still install the immutable tag. Inspect the GitHub Release, workflow output, and repository rules or credentials. Fix the external cause, then rerun the failed workflow or dispatch **Release** with the same existing tag. Locally, from the reviewed release checkout with its dependencies/browser available:
 
 ```sh
-node scripts/release.mjs v0.1.0
+uv run scripts/release.py v0.1.0
 ```
 
 The retry revalidates and reruns checks, confirms existing publication, and reconciles the highest published stable version. If a draft Release already exists, resolve its state explicitly in GitHub before retrying; the command will not silently publish a draft. A network failure while listing Releases fails the job and can be retried the same way. Never repair partial failure by moving the version tag or manually pointing `latest` to development work.
