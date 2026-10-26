@@ -54,6 +54,7 @@ Next probe: <prediction and distinguishing command>
 - Prefer targeted probes to broad logs. Mark temporary instrumentation uniquely and track disposable files.
 - Inspect only needed fields, redact secrets, and keep credentials in the environment rather than command arguments.
 - Avoid environment dumps. Follow environment authorization rules for external mutations and production instrumentation.
+- Revert edits made for a refuted hypothesis before the next probe. Keep only changes the evidence supports.
 - After three relevant failed fixes, including prior attempts, stop patching and reassess shared state, ownership, coupling, and assumptions.
 - Explain what failures rule out. Gather new distinguishing evidence before another fix. Do not begin an unapproved redesign.
 
@@ -62,6 +63,10 @@ Next probe: <prediction and distinguishing command>
 - Write the regression and fix yourself after evidence supports the cause. Keep the reproduction, rules, and criteria in view.
 - Write a regression for the actual bug pattern at a meaningful automated seam. Observe failure for the reported reason before the fix.
 - Exercise the interaction for cross-boundary or multi-caller bugs. Make the smallest evidence-supported change.
+- Fix where the fault starts, not where it shows. A guard, retry, catch, or clamp is a fix only when its state is legitimate.
+- If the state should never exist, fix what produced it. Check for the same fault in scope and fix it at that shared cause.
+- Ship no "might help" changes beside the fix. Delete code the fix replaces and reuse existing helpers.
+- Comment only a non-obvious why that the code cannot show. A workaround that needs a long comment means the fix is wrong.
 - If no meaningful automated seam exists, explain why and use the strongest observable check. Avoid coverage-only tests.
 - Inspect the result against regression red/green and original reproduction evidence.
 
@@ -79,6 +84,7 @@ Next probe: <prediction and distinguishing command>
 - If delegation is unavailable or prohibited, review each axis yourself and disclose the limitation.
 - **Cause and regression:** check cause evidence, test seam, detection of the bug or a plausible equivalent, and original reproduction.
 - **Code:** check correctness, maintainability, security, concurrency, errors, compatibility, unintended behavior, and repository rules.
+- Ask what could be deleted without changing behavior. Flag guards hiding illegitimate states and edits the cause does not need.
 - Distinguish rule violations from judgment calls. Exclude unrelated pre-existing issues.
 - Keep separate verdicts (`Approve`, `Findings`, `Blocked`), unverifiable items, and findings graded critical, important, or minor.
 - Each finding needs file:line, conflicting evidence or rule, impact, and a concrete fix when needed.
@@ -92,7 +98,8 @@ Next probe: <prediction and distinguishing command>
 
 ## Step 8: Clean up and report
 
-- Audit temporary instrumentation, disposable harnesses, final diff, and untracked files against the baseline. A read-only side check may help.
+- Audit instrumentation, abandoned fix attempts, disposable harnesses, final diff, and untracked files against the baseline.
+- A read-only side check may help.
 - Remove temporary artifacts while preserving user files. Retain harnesses only for explicit regression or benchmark purposes.
 - Verify cleanup and ensure final checks cover review fixes. Reuse current passing evidence if no relevant change followed it.
 - Report in chat without requiring a commit, publication, or diagnosis document:
