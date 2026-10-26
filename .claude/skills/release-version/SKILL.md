@@ -1,11 +1,11 @@
 ---
-name: release-notes
+name: release-version
 description: Draft and maintain this repository's changelog and reviewed GitHub release notes from verified changes. Use when preparing or correcting release prose, not for publishing a release.
 metadata:
   internal: true
 ---
 
-# Release notes
+# Release version
 
 Work in the current repository. Read its release guide, existing `CHANGELOG.md`, and recent release notes before editing. This skill writes release prose; it does not choose a version, tag, commit, push, or publish unless the user separately requests those actions.
 
