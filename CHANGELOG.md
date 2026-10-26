@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## [0.1.10]
+
 - Brainstorm session folders are now date-prefixed as `.my-dev-skills/yyyy-mm-dd-<slug>/`.
 - Removed brainstorm's visual workspace: the HTML templates, examples, and `visuals/` folder.
 - Brainstorm's decision ledger script is now `scripts/ledger.py` and runs with `python3` (standard library only) instead of Node.js.
